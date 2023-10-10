@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adamian.learningzone.domain.model.QuestionItem
-import com.adamian.learningzone.data.repository.QuestionRepository
+import com.adamian.learningzone.data.repository.QuestionRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionViewModel @Inject constructor(
-    private val questionRepository: QuestionRepository
+    private val questionRepository: QuestionRepositoryImp
 ) : ViewModel() {
     private val TAG = "QuestionViewModel"
     val allQuestionItems = MutableStateFlow<List<QuestionItem?>>(emptyList())

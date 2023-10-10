@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.adamian.learningzone.data.database.AppDao
 import com.adamian.learningzone.data.database.AppDatabase
-import com.adamian.learningzone.data.repository.QuestionRepository
+import com.adamian.learningzone.data.repository.QuestionRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +34,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideQuestionRepository(appDao: AppDao) : QuestionRepository {
-        return QuestionRepository(appDao = appDao)
+    fun provideQuestionRepository(appDao: AppDao) : QuestionRepositoryImp {
+        return QuestionRepositoryImp(appDao = appDao)
     }
 }
