@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.adamian.learningzone.data.database.AppDao
 import com.adamian.learningzone.data.database.AppDatabase
 import com.adamian.learningzone.data.repository.QuestionRepositoryImp
+import com.adamian.learningzone.domain.repository.QuestionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +35,10 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideQuestionRepository(appDao: AppDao) : QuestionRepositoryImp {
+    fun provideQuestionRepository(
+        appDao: AppDao
+    ): QuestionRepository {
         return QuestionRepositoryImp(appDao = appDao)
     }
+
 }

@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -88,6 +86,8 @@ dependencies {
     // ViewModel lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
 
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
 }
 
