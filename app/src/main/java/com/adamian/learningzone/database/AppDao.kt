@@ -11,5 +11,5 @@ interface AppDao {
     suspend fun insertQuestion(questionEntity: QuestionEntity)
 
     @Query("SELECT * FROM QuestionEntity")
-    suspend fun getAll(): List<QuestionEntity>
+    suspend fun getAllQuestions(): List<QuestionEntity>
 }

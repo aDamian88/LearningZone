@@ -1,5 +1,6 @@
 package com.adamian.learningzone
 
+import QuizScreen
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -9,13 +10,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.adamian.learningzone.model.QuestionItem
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
 import com.adamian.learningzone.viewmodel.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -23,17 +30,30 @@ class MainActivity : ComponentActivity() {
 
     private val questionViewModel: QuestionViewModel by viewModels()
 
+    private var defaultQuestionList = emptyList<QuestionItem?>()
+
+    private val questionItems = arrayOf(
+        QuestionItem(
+            "new question",
+            "new description",
+            listOf("first option", "second option", "third option", "fourthOption"),
+            "1"
+        ),
+        QuestionItem(
+            "another question",
+            "another description",
+            listOf("first option", "second option", "third option", "fourthOption"),
+            "2"
+        ),
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var questions = questionViewModel.getQuestions()
-        Log.d(TAG, "onCreate: $questions")
 
-        questionViewModel.saveQuestions(
-            QuestionItem(
-                question = "new question",
-                answerDescription = "new description"
-            )
-        )
+        // save questions
+        questionItems.forEach {
+            questionViewModel.saveQuestion(it)
+        }
         setContent {
             LearningZoneTheme {
                 // A surface container using the 'background' color from the theme
@@ -41,25 +61,37 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val questionListState by questionViewModel.allQuestionItems.collectAsState()
+
+                    if (questionListState.isNotEmpty()) {
+                        var quizCompleted by remember { mutableStateOf(false) }
+
+                        QuizScreen(questionListState[0]!!) {
+                            quizCompleted = true
+                        }
+                    } else {
+                        // Display a loading indicator or empty state message
+                        Text(text = "Loading questions...")
+                    }
                 }
             }
         }
+        questionViewModel.getAllQuestions()
+
+        observeQuestions()
+
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun observeQuestions() {
+        val questions = questionViewModel.allQuestionItems
+        Log.d(TAG, "observeQuestions: $questions")
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LearningZoneTheme {
-        Greeting("Android")
+        lifecycleScope.launch {
+            questionViewModel.allQuestionItems.collectLatest {
+                Log.d(TAG, "observeQuestions: ${questions.value}")
+                defaultQuestionList = questions.value
+            }
+        }
+
     }
 }
