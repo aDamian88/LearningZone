@@ -1,6 +1,6 @@
-package com.adamian.learningzone.model
+package com.adamian.learningzone.domain.model
 
-import com.adamian.learningzone.data.QuestionEntity
+import com.adamian.learningzone.data.local.QuestionEntity
 
 
 data class QuestionItem(

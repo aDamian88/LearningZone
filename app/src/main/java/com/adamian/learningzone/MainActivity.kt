@@ -17,9 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.adamian.learningzone.model.QuestionItem
+import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
-import com.adamian.learningzone.viewmodel.QuestionViewModel
+import com.adamian.learningzone.ui.viewmodel.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

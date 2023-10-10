@@ -1,10 +1,10 @@
-package com.adamian.learningzone.repository
+package com.adamian.learningzone.data.repository
 
 import android.util.Log
-import com.adamian.learningzone.database.AppDao
-import com.adamian.learningzone.model.QuestionItem
-import com.adamian.learningzone.model.QuestionItem.Companion.mapToEntity
-import com.adamian.learningzone.model.QuestionItem.Companion.mapToItem
+import com.adamian.learningzone.data.database.AppDao
+import com.adamian.learningzone.domain.model.QuestionItem
+import com.adamian.learningzone.domain.model.QuestionItem.Companion.mapToEntity
+import com.adamian.learningzone.domain.model.QuestionItem.Companion.mapToItem
 import javax.inject.Inject
 
 class QuestionRepository @Inject constructor(

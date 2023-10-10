@@ -1,4 +1,4 @@
-package com.adamian.learningzone.data
+package com.adamian.learningzone.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

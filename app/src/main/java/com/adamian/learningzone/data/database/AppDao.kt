@@ -1,9 +1,9 @@
-package com.adamian.learningzone.database
+package com.adamian.learningzone.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.adamian.learningzone.data.QuestionEntity
+import com.adamian.learningzone.data.local.QuestionEntity
 
 @Dao
 interface AppDao {
