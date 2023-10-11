@@ -11,9 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
@@ -30,13 +27,13 @@ class MainActivity : ComponentActivity() {
             "new question",
             "new description",
             listOf("first option", "second option", "third option", "fourthOption"),
-            "1"
+            "first option"
         ),
         QuestionItem(
             "another question",
             "another description",
             listOf("first option", "second option", "third option", "fourthOption"),
-            "2"
+            "second option"
         ),
     )
 
@@ -58,11 +55,7 @@ class MainActivity : ComponentActivity() {
                     val questionListState by questionViewModel.questionState.collectAsStateWithLifecycle()
 
                     if (questionListState.isNotEmpty()) {
-                        var quizCompleted by remember { mutableStateOf(false) }
-
-                        QuizScreen(questionListState[0]!!) {
-                            quizCompleted = true
-                        }
+                        QuizScreen(questionItems =  questionListState)
                     } else {
                         // Display a loading indicator or empty state message
                         Text(text = "Loading questions...")

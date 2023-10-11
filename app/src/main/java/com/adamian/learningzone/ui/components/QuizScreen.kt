@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,46 +9,87 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.adamian.learningzone.domain.model.QuestionItem
 
+private val TAG = "QuizScreen"
+
 @Composable
-fun QuizScreen(questionItem: QuestionItem, onNextClick: () -> Unit) {
+fun QuizScreen(questionItems: List<QuestionItem?>) {
+    var currentIndex by remember { mutableStateOf(0) }
     var selectedChoice by remember { mutableStateOf<Int?>(null) }
+    var correctAnswers by remember { mutableStateOf(0) }
+    var showCorrect by remember { mutableStateOf(false) }
+
+    val questionItem = questionItems.getOrNull(currentIndex)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = questionItem.question,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        questionItem.options.forEachIndexed { index, choice ->
-            ChoiceItem(
-                text = choice!!,
-                selected = index == selectedChoice,
-                onClick = { selectedChoice = index }
+        if (questionItem != null) {
+            Text(
+                text = questionItem.question,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            questionItem.options.forEachIndexed { index, choice ->
+                ChoiceItem(
+                    text = choice ?: "",
+                    selected = index == selectedChoice,
+                    correct = showCorrect && questionItem.correctOption == choice,
+                    showCorrect = showCorrect, // Pass showCorrect here
+                    onClick = {
+                        // Only update the selected choice when the user clicks
+                        if (!showCorrect) {
+                            selectedChoice = index
+                        }
+                    }
+                )
+            }
 
-        Button(
-            onClick = onNextClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(text = "Next")
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    Log.d(TAG, "QuizScreen: selectedChoice: $selectedChoice")
+                    Log.d(TAG, "QuizScreen: showCorrect: $showCorrect")
+                    if (selectedChoice != null && !showCorrect) {
+                        if (selectedChoice == questionItem.options.indexOf(questionItem.correctOption)) {
+                            correctAnswers++
+                        }
+                        showCorrect = true
+                    } else {
+                        currentIndex++
+                        showCorrect = false
+                        selectedChoice = null
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(text = if (showCorrect) "Next" else "Check")
+            }
+        } else {
+            Text("Quiz Complete! You got $correctAnswers out of ${questionItems.size} correct.")
         }
     }
 }
 
 @Composable
-fun ChoiceItem(text: String, selected: Boolean, onClick: () -> Unit) {
-    val backgroundColor = if (selected) Color.Gray else Color.Transparent
-    val contentColor = if (selected) Color.White else Color.Black
+fun ChoiceItem(
+    text: String,
+    selected: Boolean,
+    correct: Boolean,
+    onClick: () -> Unit,
+    showCorrect: Boolean
+) {
+    val backgroundColor = if (showCorrect) {
+        if (correct) Color.Green else Color.Red
+    } else {
+        if (selected) Color.Gray else Color.Transparent
+    }
+    val contentColor = if (selected || correct || showCorrect) Color.White else Color.Black
 
     Surface(
         modifier = Modifier
