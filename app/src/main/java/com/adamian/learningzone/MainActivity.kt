@@ -13,6 +13,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.adamian.learningzone.domain.model.QuestionItem
+import com.adamian.learningzone.ui.components.HomeScreen
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
 import com.adamian.learningzone.ui.viewmodel.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,16 +25,18 @@ class MainActivity : ComponentActivity() {
 
     private val questionItems = arrayOf(
         QuestionItem(
-            "new question",
+            "Για να αναπαραστήσουμε τα δεδομένα σε έναν αλγόριθμο χρησιμοποιούμε",
             "new description",
-            listOf("first option", "second option", "third option", "fourthOption"),
-            "first option"
+            listOf("Αριθμούς", "Λέξεις", "Σταθερές και μεταβλητές", "Αριθμούς και λέξεις"),
+            "Σταθερές και μεταβλητές",
+            1
         ),
         QuestionItem(
             "another question",
             "another description",
             listOf("first option", "second option", "third option", "fourthOption"),
-            "second option"
+            "second option",
+            1
         ),
     )
 
@@ -54,12 +57,13 @@ class MainActivity : ComponentActivity() {
                     questionViewModel.getAllQuestions()
                     val questionListState by questionViewModel.questionState.collectAsStateWithLifecycle()
 
-                    if (questionListState.isNotEmpty()) {
-                        QuizScreen(questionItems =  questionListState)
-                    } else {
-                        // Display a loading indicator or empty state message
-                        Text(text = "Loading questions...")
-                    }
+//                    if (questionListState.isNotEmpty()) {
+//                        QuizScreen(questionItems =  questionListState)
+//                    } else {
+//                        // Display a loading indicator or empty state message
+//                        Text(text = "Loading questions...")
+//                    }
+                    HomeScreen()
                 }
             }
         }

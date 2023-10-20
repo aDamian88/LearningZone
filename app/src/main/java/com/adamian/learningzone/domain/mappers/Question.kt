@@ -11,7 +11,8 @@ internal fun QuestionItem.toQuestionEntity(): QuestionEntity {
         secondOption = options[1],
         thirdOption = options[2],
         fourthOption = options[3],
-        correctOption = correctOption
+        correctOption = correctOption,
+        chapter = chapter
     )
 }
 
@@ -20,7 +21,7 @@ internal fun QuestionEntity.toQuestionItem(): QuestionItem {
         question = question ?: "",
         answerDescription = answerDescription ?: "",
         options = listOf(firstOption, secondOption, thirdOption, fourthOption),
-        correctOption = correctOption ?: ""
-
+        correctOption = correctOption ?: "",
+        chapter = chapter ?: 0
     )
 }

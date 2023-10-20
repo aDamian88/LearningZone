@@ -14,5 +14,6 @@ data class QuestionEntity(
     @ColumnInfo(name = "thirdOption") val thirdOption: String?,
     @ColumnInfo(name = "fourthOption") val fourthOption: String?,
     @ColumnInfo(name = "correctOption") val correctOption: String?,
+    @ColumnInfo(name = "chapter") val chapter: Int?,
 ) {
 }
