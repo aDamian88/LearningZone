@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.ui.components.HomeScreen
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
@@ -49,7 +51,11 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             LearningZoneTheme {
-                // A surface container using the 'background' color from the theme
+                val navController = rememberNavController()
+//                NavHost(navController = navController, startDestination = "home") {
+//
+//                }
+//                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -57,13 +63,13 @@ class MainActivity : ComponentActivity() {
                     questionViewModel.getAllQuestions()
                     val questionListState by questionViewModel.questionState.collectAsStateWithLifecycle()
 
-//                    if (questionListState.isNotEmpty()) {
-//                        QuizScreen(questionItems =  questionListState)
-//                    } else {
-//                        // Display a loading indicator or empty state message
-//                        Text(text = "Loading questions...")
-//                    }
-                    HomeScreen()
+                    if (questionListState.isNotEmpty()) {
+                        QuizScreen(questionItems =  questionListState)
+                    } else {
+                        // Display a loading indicator or empty state message
+                        Text(text = "Loading questions...")
+                    }
+//                    HomeScreen()
                 }
             }
         }
