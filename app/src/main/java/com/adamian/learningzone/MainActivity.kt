@@ -12,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.ui.components.HomeScreen
+import com.adamian.learningzone.ui.loginscreen.LoginView
 import com.adamian.learningzone.ui.theme.LearningZoneTheme
 import com.adamian.learningzone.ui.viewmodel.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,28 +54,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             LearningZoneTheme {
                 val navController = rememberNavController()
-//                NavHost(navController = navController, startDestination = "home") {
-//
-//                }
-//                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    questionViewModel.getAllQuestions()
-                    val questionListState by questionViewModel.questionState.collectAsStateWithLifecycle()
-
-                    if (questionListState.isNotEmpty()) {
-                        QuizScreen(questionItems =  questionListState)
-                    } else {
-                        // Display a loading indicator or empty state message
-                        Text(text = "Loading questions...")
-                    }
-//                    HomeScreen()
+                LoginView()
                 }
             }
         }
 
-    }
 
 }
