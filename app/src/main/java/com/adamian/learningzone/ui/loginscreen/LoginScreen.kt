@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.adamian.learningzone.R
+import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 
 @Composable
@@ -63,24 +62,27 @@ fun LoginView() {
                     .padding(horizontal = 24.dp, vertical = 48.dp) // Add padding for margin
                     .border(
                         width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = LearningZoneAppTheme.colorScheme.primary,
                         shape = RoundedCornerShape(10.dp)
                     )
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(LearningZoneAppTheme.colorScheme.background)
                     .align(Alignment.Center)
             ) {
                 Card(
-                    colors= CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary),
+                    colors= CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary),
+                        .fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
                         text = "checkingggg",
                         modifier = Modifier.padding(16.dp),
+                        style = LearningZoneAppTheme.typography.labelLarge
                     )
                 }
             }
