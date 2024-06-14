@@ -39,9 +39,7 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 fun LoginView(
     navigateToHome: (Int) -> Unit
 ) {
-    Scaffold(
-
-    ) { padding ->
+    Scaffold { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
