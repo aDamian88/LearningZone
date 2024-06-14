@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.adamian.learningzone.domain.model.QuestionItem
-import com.adamian.learningzone.ui.loginscreen.LoginView
+import com.adamian.learningzone.ui.navigation.NavGraph
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.viewmodel.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             LearningZoneAppTheme {
                 val navController = rememberNavController()
-                LoginView()
-                }
+                NavGraph(navController)
             }
         }
+    }
 }
