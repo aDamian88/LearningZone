@@ -6,14 +6,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adamian.learningzone.domain.model.QuestionItem
 
 private val TAG = "QuizScreen"
 
 @Composable
-fun QuizScreen(questionItems: List<QuestionItem?>) {
+fun QuizScreenOld(questionItems: List<QuestionItem?>) {
     var currentIndex by remember { mutableStateOf(0) }
     var selectedChoice by remember { mutableStateOf<Int?>(null) }
     var correctAnswers by remember { mutableStateOf(0) }

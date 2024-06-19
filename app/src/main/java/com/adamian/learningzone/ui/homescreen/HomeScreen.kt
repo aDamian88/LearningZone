@@ -1,32 +1,54 @@
-package com.adamian.learningzone.ui.components
+package com.adamian.learningzone.ui.homescreen
 
-import android.view.RoundedCorner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navigateToChapters: (Int) -> Unit,
+    navigateToQuiz: (Int) -> Unit
+) {
+
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showStatsBottomSheet by remember { mutableStateOf(false) }
+    var showSubscriptionBottomSheet by remember { mutableStateOf(false) }
+
     Scaffold { padding ->
         Box(
             modifier = Modifier
@@ -72,7 +94,7 @@ fun HomeScreen() {
                         style = LearningZoneAppTheme.typography.titleLarge
                     )
                 }
-                HomeCard()
+                HomeCard(navigateToQuiz = navigateToQuiz)
 
                 Text(
                     text = "Επίπεδο",
@@ -84,7 +106,7 @@ fun HomeScreen() {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     IconLevelCard()
-                    LevelCard()
+                    LevelCard(navigateToChapters = navigateToChapters)
                     IconLevelCard()
                 }
 
@@ -94,17 +116,97 @@ fun HomeScreen() {
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    SubscriptionCard()
-                    StatsCard()
+                    SubscriptionCard(onCardClick = { showSubscriptionBottomSheet = true })
+                    StatsCard(onCardClick = { showStatsBottomSheet = true })
                 }
 
             }
         }
+
+        if (showSubscriptionBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showSubscriptionBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                // Sheet content
+                Button(onClick = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showSubscriptionBottomSheet = false
+                        }
+                    }
+                }) {
+                    Text("Hide bottom sheet")
+                }
+            }
+        }
+
+        if (showStatsBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showStatsBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Row {
+                        SquareCard(
+                            modifier = Modifier.padding(
+                                top = 38.dp,
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 16.dp
+                            ),
+                            topText = "Ολοκληρωμένα",
+                            centerText = "Κουίζ",
+                            bottomText = "223",
+                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
+                        )
+                        SquareCard(
+                            modifier = Modifier.padding(16.dp),
+                            topText = "Ολοκληρωμένα",
+                            centerText = "Κουίζ",
+                            bottomText = "90",
+                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
+                        )
+                    }
+                    Row {
+                        SquareCard(
+                            modifier = Modifier.padding(
+                                top = 38.dp,
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 16.dp
+                            ),
+                            topText = "Ολοκληρωμένα",
+                            centerText = "Κουίζ",
+                            bottomText = "123",
+                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
+                        )
+                        SquareCard(
+                            modifier = Modifier.padding(16.dp),
+                            topText = "Ολοκληρωμένα",
+                            centerText = "Κουίζ",
+                            bottomText = "123",
+                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
+                        )
+                    }
+                }
+            }
+        }
+
     }
 }
 
 @Composable
-fun HomeCard() {
+fun HomeCard(
+    navigateToQuiz: (Int) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(
@@ -113,7 +215,8 @@ fun HomeCard() {
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        onClick = { navigateToQuiz(0) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +252,9 @@ fun HomeCard() {
 }
 
 @Composable
-fun LevelCard() {
+fun LevelCard(
+    navigateToChapters: (Int) -> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(
@@ -157,7 +262,8 @@ fun LevelCard() {
         ),
         modifier = Modifier
             .padding(16.dp),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        onClick = { navigateToChapters(0) }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
@@ -168,6 +274,48 @@ fun LevelCard() {
             Text(
                 text = "20 ερωτήσεις",
                 style = LearningZoneAppTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+@Composable
+fun SquareCard(
+    modifier: Modifier = Modifier,
+    topText: String,
+    centerText: String,
+    bottomText: String,
+    backgroundColor: CardColors
+) {
+    Card(
+        colors = backgroundColor,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                text = topText,
+                style = LearningZoneAppTheme.typography.labelLarge,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            )
+            Text(
+                text = centerText,
+                style = LearningZoneAppTheme.typography.titleLarge,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            )
+            Text(
+                text = bottomText,
+                style = LearningZoneAppTheme.typography.titleLarge,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
             )
         }
     }
@@ -241,14 +389,15 @@ fun AverageCard() {
 }
 
 @Composable
-fun SubscriptionCard() {
+fun SubscriptionCard(onCardClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
         modifier = Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
@@ -281,14 +430,15 @@ fun SubscriptionCard() {
 }
 
 @Composable
-fun StatsCard() {
+fun StatsCard(onCardClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
         modifier = Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
@@ -320,11 +470,28 @@ fun StatsCard() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheet(onDismiss: () -> Unit) {
+    val modalBottomSheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        sheetState = modalBottomSheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+    ) {
+        Text(
+            text = "This is a BottomSheet",
+            style = LearningZoneAppTheme.typography.labelLarge
+        )
+    }
+}
+
 @Preview
 @Composable
 fun HomeScreenPreview() {
     MaterialTheme {
-        HomeScreen()
     }
 }
 

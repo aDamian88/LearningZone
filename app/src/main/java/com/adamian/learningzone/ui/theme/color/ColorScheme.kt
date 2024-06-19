@@ -9,7 +9,11 @@ data class AppColorScheme(
     val primary: Color,
     val onPrimary: Color,
     val secondary: Color,
-    val onSecondary: Color
+    val onSecondary: Color,
+    val tertiary: Color,
+    val onTertiary: Color,
+    val quaternary: Color,
+    val onQuaternary: Color
 )
 
 val darkColorScheme = AppColorScheme(
@@ -17,8 +21,12 @@ val darkColorScheme = AppColorScheme(
     onBackground = gray100_2,
     primary = purple700,
     onPrimary = purple900,
-    secondary = teal700,
-    onSecondary = teal900
+    secondary = red700,
+    onSecondary = red900,
+    tertiary = yellow700,
+    onTertiary = yellow900,
+    quaternary = teal700,
+    onQuaternary = teal900
 )
 
 val lightColorScheme = AppColorScheme(
@@ -27,7 +35,11 @@ val lightColorScheme = AppColorScheme(
     primary = purple200,
     onPrimary = purple100,
     secondary = red200,
-    onSecondary = red100
+    onSecondary = red100,
+    tertiary = yellow200,
+    onTertiary = yellow100,
+    quaternary = teal200,
+    onQuaternary = teal100
 )
 
 val localAppColorScheme = staticCompositionLocalOf {
