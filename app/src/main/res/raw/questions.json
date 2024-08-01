@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Ανάλυση προβλήματος",
+    "question": "Πρόβλημα είναι μια μαθηματική κατάσταση που πρέπει να αντιμετωπίσουμε.",
+    "answerDescription": "",
+    "firstOption": "Σωστό",
+    "secondOption": "Λάθος",
+    "thirdOption": "",
+    "fourthOption": "",
+    "correctOption": "secondOption",
+    "chapter": 1,
+    "level": 1
+  },
+  {
+    "title": "Ανάλυση προβλήματος",
+    "question": "Πρόβλημα εννοείται μια κατάσταση η οποία χρήζει αντιμετώπισης και απαιτεί λύση που συνήθως είναι γνωστή εκ των προτέρων.",
+    "answerDescription": "",
+    "firstOption": "Σωστό",
+    "secondOption": "Λάθος",
+    "thirdOption": "",
+    "fourthOption": "",
+    "correctOption": "secondOption",
+    "chapter": 1,
+    "level": 1
+  },
+  {
+    "title": "Ανάλυση προβλήματος",
+    "question": "Το πρόβλημα του έτους 2000 προέρχεται από το γεγονός ότι οι υπολογιστές χρησιμοποιούσαν 2 ψηφία για την αναπαράσταση του έτους.",
+    "answerDescription": "",
+    "firstOption": "Σωστό",
+    "secondOption": "Λάθος",
+    "thirdOption": "",
+    "fourthOption": "",
+    "correctOption": "firstOption",
+    "chapter": 1,
+    "level": 1
+  },
+  {
+    "title": "Ανάλυση προβλήματος",
+    "question": "Η επίλυση ενός προβλήματος δεν εξαρτάται άμεσα από τη διατύπωσή του.",
+    "answerDescription": "",
+    "firstOption": "Σωστό",
+    "secondOption": "Λάθος",
+    "thirdOption": "",
+    "fourthOption": "",
+    "correctOption": "secondOption",
+    "chapter": 1,
+    "level": 1
+  },
+  {
+    "title": "Ανάλυση προβλήματος",
+    "question": "Η διατύπωση ενός προβλήματος μπορεί να γίνει με ποικίλους τρόπους.",
+    "answerDescription": "",
+    "firstOption": "Σωστό",
+    "secondOption": "Λάθος",
+    "thirdOption": "",
+    "fourthOption": "",
+    "correctOption": "firstOption",
+    "chapter": 1,
+    "level": 1
+  }
+]

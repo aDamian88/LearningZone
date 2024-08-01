@@ -20,4 +20,13 @@ class QuestionRepositoryImp @Inject constructor(
             it.toQuestionItem() // perhaps this should go to a different layer.
         }
     }
+
+    override suspend fun insertAll(vararg questions: QuestionEntity) {
+        appDao.insertAll(*questions)
+    }
+
+    override suspend fun isDatabaseEmpty(): Boolean {
+        return appDao.getRowCount() == 0
+    }
+
 }

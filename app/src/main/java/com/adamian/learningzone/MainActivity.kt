@@ -16,30 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val questionViewModel: QuestionViewModel by viewModels()
 
-    private val questionItems = arrayOf(
-        QuestionItem(
-            "Για να αναπαραστήσουμε τα δεδομένα σε έναν αλγόριθμο χρησιμοποιούμε",
-            "new description",
-            listOf("Αριθμούς", "Λέξεις", "Σταθερές και μεταβλητές", "Αριθμούς και λέξεις"),
-            "Σταθερές και μεταβλητές",
-            1
-        ),
-        QuestionItem(
-            "another question",
-            "another description",
-            listOf("first option", "second option", "third option", "fourthOption"),
-            "second option",
-            1
-        ),
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // save questions
-        questionItems.forEach {
-            questionViewModel.saveQuestion(it)
-        }
         setContent {
             LearningZoneAppTheme {
                 val navController = rememberNavController()
