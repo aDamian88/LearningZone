@@ -7,7 +7,7 @@
     "secondOption": "Λάθος",
     "thirdOption": "",
     "fourthOption": "",
-    "correctOption": "secondOption",
+    "correctOption": "Λάθος",
     "chapter": 1,
     "level": 1
   },
@@ -19,7 +19,7 @@
     "secondOption": "Λάθος",
     "thirdOption": "",
     "fourthOption": "",
-    "correctOption": "secondOption",
+    "correctOption": "Λάθος",
     "chapter": 1,
     "level": 1
   },
@@ -31,7 +31,7 @@
     "secondOption": "Λάθος",
     "thirdOption": "",
     "fourthOption": "",
-    "correctOption": "firstOption",
+    "correctOption": "Σωστό",
     "chapter": 1,
     "level": 1
   },
@@ -43,7 +43,7 @@
     "secondOption": "Λάθος",
     "thirdOption": "",
     "fourthOption": "",
-    "correctOption": "secondOption",
+    "correctOption": "Λάθος",
     "chapter": 1,
     "level": 1
   },
@@ -55,7 +55,7 @@
     "secondOption": "Λάθος",
     "thirdOption": "",
     "fourthOption": "",
-    "correctOption": "firstOption",
+    "correctOption": "Σωστό",
     "chapter": 1,
     "level": 1
   }

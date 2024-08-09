@@ -15,9 +15,9 @@ import com.adamian.learningzone.ui.quizscreen.QuizScreen
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NavRoute.Login.path
+        startDestination = NavRoute.Home.path
     ){
-        addLoginScreen(navController,this)
+//        addLoginScreen(navController,this)
         addHomeScreen(navController,this)
         addChapterScreen(navController,this)
         addQuizScreen(navController,this)

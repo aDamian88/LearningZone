@@ -2,6 +2,7 @@ package com.adamian.learningzone.ui.homescreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -86,31 +87,33 @@ fun HomeScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Καλημέρα",
+                        text = "Καλώς ήρθες",
                         style = LearningZoneAppTheme.typography.labelLarge
                     )
                     Text(
-                        text = "Γιάννης Δαμιανάκης",
+                        text = "Καλή μάθηση!",
                         style = LearningZoneAppTheme.typography.titleLarge
                     )
                 }
+
+                AverageFrame()
+
                 HomeCard(navigateToQuiz = navigateToQuiz)
 
-                Text(
-                    text = "Επίπεδο",
-                    style = LearningZoneAppTheme.typography.titleLarge
-                )
+//                Text(
+//                    text = "Επίπεδο",
+//                    style = LearningZoneAppTheme.typography.titleLarge
+//                )
+//
+//                Row(
+//                    modifier = Modifier.fillMaxSize(),
+//                    horizontalArrangement = Arrangement.SpaceEvenly
+//                ) {
+//                    IconLevelCard()
+//                    LevelCard(navigateToChapters = navigateToChapters)
+//                    IconLevelCard()
+//                }
 
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    IconLevelCard()
-                    LevelCard(navigateToChapters = navigateToChapters)
-                    IconLevelCard()
-                }
-
-                AverageCard()
 
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -265,7 +268,8 @@ fun LevelCard(
         shape = RoundedCornerShape(20.dp),
         onClick = { navigateToChapters(0) }
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp)) {
             Text(
                 text = "1",
                 style = LearningZoneAppTheme.typography.titleLarge,
@@ -344,6 +348,54 @@ fun IconLevelCard() {
 }
 
 @Composable
+fun AverageFrame() {
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = LearningZoneAppTheme.colorScheme.onBackground,
+            )
+            .background(
+                color = LearningZoneAppTheme.colorScheme.background,
+            )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.average_icon),
+                tint = Color.Unspecified,
+                contentDescription = null,
+                modifier = Modifier.size(70.dp)
+            )
+            Spacer(modifier = Modifier.width(18.dp))
+            Column {
+                Text(
+                    text = "Μέσος όρος",
+                    style = LearningZoneAppTheme.typography.titleLarge
+                )
+                Text(
+                    text = "Απαντήσεων",
+                    style = LearningZoneAppTheme.typography.labelLarge
+                )
+            }
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
+                tint = Color.Unspecified,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(25.dp)
+                    .offset(x = 15.dp, y = 25.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
 fun AverageCard() {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
@@ -400,9 +452,10 @@ fun SubscriptionCard(onCardClick: () -> Unit) {
             .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.subscription_icon),
@@ -410,21 +463,12 @@ fun SubscriptionCard(onCardClick: () -> Unit) {
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
-            Spacer(modifier = Modifier.width(18.dp))
-            Column {
-                Text(
-                    text = "Συμμετοχή",
-                    style = LearningZoneAppTheme.typography.labelLarge
-                )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
-                    tint = Color.Unspecified,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(25.dp)
-                        .offset(x = 15.dp, y = 25.dp)
-                )
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Ρυθμίσεις",
+                style = LearningZoneAppTheme.typography.labelLarge
+            )
         }
     }
 }
@@ -441,9 +485,11 @@ fun StatsCard(onCardClick: () -> Unit) {
             .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.stats_icon),
@@ -451,21 +497,12 @@ fun StatsCard(onCardClick: () -> Unit) {
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
-            Spacer(modifier = Modifier.width(18.dp))
-            Column {
-                Text(
-                    text = "Στατιστικά",
-                    style = LearningZoneAppTheme.typography.labelLarge
-                )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
-                    tint = Color.Unspecified,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(25.dp)
-                        .offset(x = 15.dp, y = 25.dp)
-                )
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Στατιστικά",
+                style = LearningZoneAppTheme.typography.labelLarge
+            )
         }
     }
 }

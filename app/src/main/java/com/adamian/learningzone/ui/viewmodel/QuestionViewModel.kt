@@ -23,11 +23,11 @@ class QuestionViewModel @Inject constructor(
     val questionState: StateFlow<List<QuestionItem?>> = allQuestionItems.asStateFlow()
 
     fun getAllQuestions() {
-        viewModelScope.launch {
-            getAllQuestionsUC.invoke().collectLatest { result ->
-                allQuestionItems.value = result
-            }
-        }
+//        viewModelScope.launch {
+//            getAllQuestionsUC.invoke().collectLatest { result ->
+//                allQuestionItems.value = result
+//            }
+//        }
     }
 
     fun saveQuestion(questionItem: QuestionItem) {

@@ -15,10 +15,14 @@ class QuestionRepositoryImp @Inject constructor(
         appDao.insertQuestion(questionEntity)
     }
 
-    override suspend fun getAllQuestions(): List<QuestionItem> {
+    suspend fun getAllQuestionItems(): List<QuestionItem> {
         return appDao.getAllQuestions().map {
             it.toQuestionItem() // perhaps this should go to a different layer.
         }
+    }
+
+    override suspend fun getAllQuestions(): List<QuestionEntity> {
+        return appDao.getAllQuestions()
     }
 
     override suspend fun insertAll(vararg questions: QuestionEntity) {
