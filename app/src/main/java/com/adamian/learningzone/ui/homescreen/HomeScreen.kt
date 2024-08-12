@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,9 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,11 +80,16 @@ fun HomeScreen(
 
             Column(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
+                    .fillMaxSize()
+                    .align(Alignment.Center)
                     .verticalScroll(rememberScrollState())
-
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .weight(0.8f) // Distribute vertical space
+                        .fillMaxWidth()
+                ) {
                     Text(
                         text = "Καλώς ήρθες",
                         style = LearningZoneAppTheme.typography.labelLarge
@@ -96,28 +100,20 @@ fun HomeScreen(
                     )
                 }
 
-                AverageFrame()
+                AverageFrame(
+                    modifier = Modifier
+                        .weight(1.5f)
+                        .fillMaxWidth()
+                )
 
-                HomeCard(navigateToQuiz = navigateToQuiz)
-
-//                Text(
-//                    text = "Επίπεδο",
-//                    style = LearningZoneAppTheme.typography.titleLarge
-//                )
-//
-//                Row(
-//                    modifier = Modifier.fillMaxSize(),
-//                    horizontalArrangement = Arrangement.SpaceEvenly
-//                ) {
-//                    IconLevelCard()
-//                    LevelCard(navigateToChapters = navigateToChapters)
-//                    IconLevelCard()
-//                }
-
+                HomeCard(modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),navigateToQuiz = navigateToChapters)
 
                 Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                 ) {
                     SubscriptionCard(onCardClick = { showSubscriptionBottomSheet = true })
                     StatsCard(onCardClick = { showStatsBottomSheet = true })
@@ -133,15 +129,27 @@ fun HomeScreen(
                 },
                 sheetState = sheetState
             ) {
-                // Sheet content
-                Button(onClick = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showSubscriptionBottomSheet = false
-                        }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.bottom_sheet_background),
+                        contentDescription = null,
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Ρυθμίσεις",
+                            style = LearningZoneAppTheme.typography.titleNormal
+                        )
                     }
-                }) {
-                    Text("Hide bottom sheet")
                 }
             }
         }
@@ -153,61 +161,125 @@ fun HomeScreen(
                 },
                 sheetState = sheetState
             ) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
                 ) {
-                    Row {
-                        SquareCard(
-                            modifier = Modifier.padding(
-                                top = 38.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                                bottom = 16.dp
-                            ),
-                            topText = "Ολοκληρωμένα",
-                            centerText = "Κουίζ",
-                            bottomText = "223",
-                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
+                    Image(
+                        painter = painterResource(id = R.drawable.bottom_sheet_background),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Στατιστικά",
+                            style = LearningZoneAppTheme.typography.titleNormal
                         )
-                        SquareCard(
-                            modifier = Modifier.padding(16.dp),
-                            topText = "Ολοκληρωμένα",
-                            centerText = "Κουίζ",
-                            bottomText = "90",
-                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
-                        )
-                    }
-                    Row {
-                        SquareCard(
-                            modifier = Modifier.padding(
-                                top = 38.dp,
-                                start = 16.dp,
-                                end = 16.dp,
-                                bottom = 16.dp
-                            ),
-                            topText = "Ολοκληρωμένα",
-                            centerText = "Κουίζ",
-                            bottomText = "123",
-                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
-                        )
-                        SquareCard(
-                            modifier = Modifier.padding(16.dp),
-                            topText = "Ολοκληρωμένα",
-                            centerText = "Κουίζ",
-                            bottomText = "123",
-                            backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
-                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 48.dp)
+                        ) {
+                            SquareCard(
+                                modifier = Modifier
+                                    .weight(1f) // Distribute space evenly between the cards
+                                    .padding(
+                                        top = 48.dp,
+                                        start = 8.dp,
+                                        end = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                topText = "Ολοκληρωμένα",
+                                centerText = "Κουίζ",
+                                bottomText = "223",
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
+                            )
+                            SquareCard(
+                                modifier = Modifier
+                                    .weight(1f) // Distribute space evenly between the cards
+                                    .padding(8.dp),
+                                topText = "Ολοκληρωμένα",
+                                centerText = "Κουίζ",
+                                bottomText = "90",
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            SquareCard(
+                                modifier = Modifier
+                                    .weight(1f) // Distribute space evenly between the cards
+                                    .padding(
+                                        top = 48.dp,
+                                        start = 8.dp,
+                                        end = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                topText = "Ολοκληρωμένα",
+                                centerText = "Κουίζ",
+                                bottomText = "123",
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
+                            )
+                            SquareCard(
+                                modifier = Modifier
+                                    .weight(1f) // Distribute space evenly between the cards
+                                    .padding(8.dp),
+                                topText = "Ολοκληρωμένα",
+                                centerText = "Κουίζ",
+                                bottomText = "123",
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+}
 
+@Composable
+fun QuizProgressIndicator(
+    progress: Float, // progress value between 0f and 1f
+    modifier: Modifier = Modifier,
+    size: Dp = 100.dp,
+    strokeWidth: Dp = 8.dp,
+    correctAnswersPercentage: Int // percentage value (0-100)
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(size)
+    ) {
+        // CircularProgressIndicator
+        CircularProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.fillMaxSize(),
+            color = LearningZoneAppTheme.colorScheme.primary,
+            strokeWidth = strokeWidth,
+        )
+        // Percentage Text
+        Text(
+            text = "${correctAnswersPercentage}%",
+            style = LearningZoneAppTheme.typography.titleLarge,
+            color = LearningZoneAppTheme.colorScheme.primary
+        )
     }
 }
 
 @Composable
 fun HomeCard(
+    modifier: Modifier,
     navigateToQuiz: (Int) -> Unit
 ) {
     Card(
@@ -215,7 +287,7 @@ fun HomeCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -223,7 +295,9 @@ fun HomeCard(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.search_icon),
@@ -242,42 +316,15 @@ fun HomeCard(
                     style = LearningZoneAppTheme.typography.labelLarge
                 )
             }
+
+            Spacer(modifier = Modifier.width(36.dp))
+
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .offset(x = 15.dp, y = 25.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun LevelCard(
-    navigateToChapters: (Int) -> Unit
-) {
-    Card(
-        colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        modifier = Modifier
-            .padding(16.dp),
-        shape = RoundedCornerShape(20.dp),
-        onClick = { navigateToChapters(0) }
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = "1",
-                style = LearningZoneAppTheme.typography.titleLarge,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "20 ερωτήσεις",
-                style = LearningZoneAppTheme.typography.labelLarge
             )
         }
     }
@@ -326,31 +373,9 @@ fun SquareCard(
 }
 
 @Composable
-fun IconLevelCard() {
-    Card(
-        colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        modifier = Modifier
-            .padding(16.dp),
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.lock_icon),
-            tint = Color.Unspecified,
-            contentDescription = null,
-            modifier = Modifier
-                .size(70.dp)
-                .padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun AverageFrame() {
+fun AverageFrame(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .fillMaxWidth()
             .border(
@@ -361,81 +386,38 @@ fun AverageFrame() {
                 color = LearningZoneAppTheme.colorScheme.background,
             )
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.average_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier.size(70.dp)
-            )
-            Spacer(modifier = Modifier.width(18.dp))
-            Column {
-                Text(
-                    text = "Μέσος όρος",
-                    style = LearningZoneAppTheme.typography.titleLarge
-                )
-                Text(
-                    text = "Απαντήσεων",
-                    style = LearningZoneAppTheme.typography.labelLarge
-                )
-            }
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(25.dp)
-                    .offset(x = 15.dp, y = 25.dp)
-            )
-        }
-    }
-}
 
-
-@Composable
-fun AverageCard() {
-    Card(
-        colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.average_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier.size(70.dp)
-            )
-            Spacer(modifier = Modifier.width(18.dp))
-            Column {
-                Text(
-                    text = "Μέσος όρος",
-                    style = LearningZoneAppTheme.typography.titleLarge
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                QuizProgressIndicator(
+                    progress = 1f,
+                    correctAnswersPercentage = 100
                 )
-                Text(
-                    text = "Απαντήσεων",
-                    style = LearningZoneAppTheme.typography.labelLarge
-                )
+                Spacer(modifier = Modifier.width(18.dp))
+                Column {
+                    Text(
+                        text = "Μέσος όρος",
+                        style = LearningZoneAppTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Απαντήσεων",
+                        style = LearningZoneAppTheme.typography.labelLarge
+                    )
+                }
             }
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(25.dp)
-                    .offset(x = 15.dp, y = 25.dp)
+
+            Text(
+                modifier = Modifier.padding(top = 20.dp),
+                text = "Αρχική έκδοση της εφαργμογής περιέχει κάποιες ερωτήσεις που " +
+                        "έχουν μπει στις πανελλήνιες εξετάσεις. Αφορούν " +
+                        "όλη την ύλη του βιβλίου και θα ενημερωθούν με περισσότερες.",
+                style = LearningZoneAppTheme.typography.labelLarge
             )
+
         }
     }
 }
@@ -504,24 +486,6 @@ fun StatsCard(onCardClick: () -> Unit) {
                 style = LearningZoneAppTheme.typography.labelLarge
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheet(onDismiss: () -> Unit) {
-    val modalBottomSheetState = rememberModalBottomSheetState()
-    val coroutineScope = rememberCoroutineScope()
-
-    ModalBottomSheet(
-        onDismissRequest = { onDismiss() },
-        sheetState = modalBottomSheetState,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-    ) {
-        Text(
-            text = "This is a BottomSheet",
-            style = LearningZoneAppTheme.typography.labelLarge
-        )
     }
 }
 
