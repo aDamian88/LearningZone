@@ -58,8 +58,7 @@ private fun addChapterScreen(
     navGraphBuilder: NavGraphBuilder
 ) {
     navGraphBuilder.composable(route = NavRoute.Chapters.path) {
-        ChapterScreen(
-        )
+        ChapterScreen(navController = navController)
     }
 }
 

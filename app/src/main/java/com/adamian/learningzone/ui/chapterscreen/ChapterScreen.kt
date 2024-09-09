@@ -1,6 +1,7 @@
 package com.adamian.learningzone.ui.chapterscreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,12 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 @Composable
-fun ChapterScreen() {
+fun ChapterScreen(navController: NavController) {
 
     Scaffold { padding ->
         Box(
@@ -65,22 +68,87 @@ fun ChapterScreen() {
                         .verticalScroll(rememberScrollState())
 
                 ) {
-                    Spacer(modifier = Modifier.padding(50.dp))
 
-                    ChapterCard()
-                    ChapterCard()
-                    ChapterCard()
-                    ChapterCard()
-                    ChapterCard()
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.home_icon),
+                        tint = Color.Unspecified,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .size(70.dp)
+                            .clickable { navController.popBackStack() },
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    ChapterCard(
+                        iconResId = R.drawable.problem_analysis,
+                        title = "Κεφάλαιο 1",
+                        subtitle = "Ανάλυση Προβλήματος"
+                    )
+                    ChapterCard(
+                        iconResId = R.drawable.basic_algorithm_concept,
+                        title = "Κεφάλαιο 2",
+                        subtitle = "Βασικές Έννοιες Αλγορίθμων"
+                    )
+                    ChapterCard(
+                        iconResId = R.drawable.data_stractures_algorithms,
+                        title = "Κεφάλαιο 3",
+                        subtitle = "Δομές Δεδομένων και Αλγόριθμοι"
+                    )
+
+                    ChapterCard(
+                        iconResId = R.drawable.algorithm_design_techniques,
+                        title = "Κεφάλαιο 4",
+                        subtitle = "Τεχνικές Σχεδίασης Αλγόριθμων"
+                    )
+
+                    ChapterCard(
+                        iconResId = R.drawable.introduction_programming,
+                        title = "Κεφάλαιο 6",
+                        subtitle = "Εισαγωγή στον Προγραμματισμό"
+                    )
+
+                    ChapterCard(
+                        iconResId = R.drawable.basic_programming_concepts,
+                        title = "Κεφάλαιο 7",
+                        subtitle = "Βασικές Έννοιες Προγραμματισμού"
+                    )
+
+                    ChapterCard(
+                        iconResId = R.drawable.select_n_repeat,
+                        title = "Κεφάλαιο 8",
+                        subtitle = "Επιλογή και Επανάληψη"
+                    )
+
+                    ChapterCard(
+                        iconResId = R.drawable.matrix,
+                        title = "Κεφάλαιο 9",
+                        subtitle = "Πίνακες"
+                    )
+                    ChapterCard(
+                        iconResId = R.drawable.subprograms,
+                        title = "Κεφάλαιο 10",
+                        subtitle = "Υποπρογράμματα"
+                    )
+                    ChapterCard(
+                        iconResId = R.drawable.debbuging,
+                        title = "Κεφάλαιο 13",
+                        subtitle = "Εκσφαλμάτωση Προγράμματος"
+                    )
+
                 }
             }
         }
     }
-
 }
 
 @Composable
-fun ChapterCard() {
+fun ChapterCard(
+    iconResId: Int,
+    title: String,
+    subtitle: String
+) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(
@@ -98,21 +166,34 @@ fun ChapterCard() {
             Card(
                 colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary),
                 modifier = Modifier
-                    .size(100.dp)
-                    .padding(16.dp),
+                    .size(100.dp),
                 shape = RoundedCornerShape(8.dp),
             ) {
-                Box(modifier = Modifier.fillMaxSize())
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = iconResId),
+                        tint = Color.Unspecified,
+                        contentDescription = null,
+                        modifier = Modifier.size(70.dp)
+                    )
+                }
             }
             Spacer(modifier = Modifier.width(18.dp))
-            Column {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
-                    text = "Κεφάλαιο 1",
+                    text = title,
                     style = LearningZoneAppTheme.typography.titleLarge
                 )
                 Text(
-                    text = "Όνομα κεφαλαίου",
-                    style = LearningZoneAppTheme.typography.labelLarge
+                    text = subtitle,
+                    style = LearningZoneAppTheme.typography.labelLarge,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Spacer(modifier = Modifier.width(18.dp))

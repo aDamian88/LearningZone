@@ -106,9 +106,12 @@ fun HomeScreen(
                         .fillMaxWidth()
                 )
 
-                HomeCard(modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),navigateToQuiz = navigateToChapters)
+                HomeCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    navigateToQuiz = navigateToQuiz
+                )
 
                 Row(
                     modifier = Modifier
@@ -147,8 +150,46 @@ fun HomeScreen(
                     ) {
                         Text(
                             text = "Ρυθμίσεις",
-                            style = LearningZoneAppTheme.typography.titleNormal
+                            style = LearningZoneAppTheme.typography.titleLarge
                         )
+
+                        Card(
+                            colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 6.dp
+                            ),
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                .padding(16.dp),
+                                text = "Ξεκλείδωσε όλες τις δυνατότητες της εφαρμογής για ένα χρόνο! " +
+                                        "Εκτός από το επίπεδο 1 θα έχεις διαθέσιμα τα επίπεδα 2 και 3 " +
+                                        "με περισσότερες ερωτήσεις για καλύτερη προετοιμασία!",
+                                style = LearningZoneAppTheme.typography.labelLarge
+                            )
+                        }
+
+                        Card(
+                            colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 6.dp
+                            ),
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                .padding(16.dp),
+                                text = "Διαθέσιμο σε επόμενη έκδοση",
+                                style = LearningZoneAppTheme.typography.labelLarge
+                            )
+                        }
                     }
                 }
             }
@@ -180,7 +221,7 @@ fun HomeScreen(
                     ) {
                         Text(
                             text = "Στατιστικά",
-                            style = LearningZoneAppTheme.typography.titleNormal
+                            style = LearningZoneAppTheme.typography.titleLarge
                         )
 
                         Row(
@@ -191,26 +232,26 @@ fun HomeScreen(
                         ) {
                             SquareCard(
                                 modifier = Modifier
-                                    .weight(1f) // Distribute space evenly between the cards
+                                    .weight(1f)
                                     .padding(
                                         top = 48.dp,
                                         start = 8.dp,
                                         end = 8.dp,
                                         bottom = 8.dp
                                     ),
-                                topText = "Ολοκληρωμένα",
+                                topText = "Συνολικά",
                                 centerText = "Κουίζ",
                                 bottomText = "223",
-                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
                             )
                             SquareCard(
                                 modifier = Modifier
-                                    .weight(1f) // Distribute space evenly between the cards
+                                    .weight(1f)
                                     .padding(8.dp),
                                 topText = "Ολοκληρωμένα",
                                 centerText = "Κουίζ",
                                 bottomText = "90",
-                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
                             )
                         }
                         Row(
@@ -219,26 +260,26 @@ fun HomeScreen(
                         ) {
                             SquareCard(
                                 modifier = Modifier
-                                    .weight(1f) // Distribute space evenly between the cards
+                                    .weight(1f)
                                     .padding(
                                         top = 48.dp,
                                         start = 8.dp,
                                         end = 8.dp,
                                         bottom = 8.dp
                                     ),
-                                topText = "Ολοκληρωμένα",
-                                centerText = "Κουίζ",
+                                topText = "Απαντήσεις",
+                                centerText = "Σωστές",
                                 bottomText = "123",
-                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
                             )
                             SquareCard(
                                 modifier = Modifier
-                                    .weight(1f) // Distribute space evenly between the cards
+                                    .weight(1f)
                                     .padding(8.dp),
-                                topText = "Ολοκληρωμένα",
-                                centerText = "Κουίζ",
+                                topText = "Απαντήσεις",
+                                centerText = "Λάθος",
                                 bottomText = "123",
-                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
+                                backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
                             )
                         }
                     }
@@ -336,41 +377,37 @@ fun SquareCard(
     topText: String,
     centerText: String,
     bottomText: String,
-    backgroundColor: CardColors
+    backgroundColor: CardColors = CardDefaults.cardColors() // Added a default value
 ) {
     Card(
         colors = backgroundColor,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier,
         shape = RoundedCornerShape(20.dp)
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically), // Spaces out children
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = topText,
-                style = LearningZoneAppTheme.typography.labelLarge,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
+                style = LearningZoneAppTheme.typography.labelLarge
             )
             Text(
                 text = centerText,
-                style = LearningZoneAppTheme.typography.titleLarge,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
+                style = LearningZoneAppTheme.typography.titleLarge
             )
             Text(
                 text = bottomText,
-                style = LearningZoneAppTheme.typography.titleLarge,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
+                style = LearningZoneAppTheme.typography.titleLarge
             )
         }
     }
 }
+
 
 @Composable
 fun AverageFrame(modifier: Modifier = Modifier) {
@@ -394,8 +431,8 @@ fun AverageFrame(modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 QuizProgressIndicator(
-                    progress = 1f,
-                    correctAnswersPercentage = 100
+                    progress = 0.8f,
+                    correctAnswersPercentage = 80
                 )
                 Spacer(modifier = Modifier.width(18.dp))
                 Column {
