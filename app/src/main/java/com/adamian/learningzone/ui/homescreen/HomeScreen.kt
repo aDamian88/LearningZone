@@ -110,7 +110,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    navigateToQuiz = navigateToQuiz
+                    navigateToChapters = navigateToChapters
                 )
 
                 Row(
@@ -321,7 +321,7 @@ fun QuizProgressIndicator(
 @Composable
 fun HomeCard(
     modifier: Modifier,
-    navigateToQuiz: (Int) -> Unit
+    navigateToChapters: (Int) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
@@ -332,7 +332,7 @@ fun HomeCard(
             .padding(16.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        onClick = { navigateToQuiz(0) }
+        onClick = { navigateToChapters(0) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

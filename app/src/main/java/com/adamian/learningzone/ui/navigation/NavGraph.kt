@@ -3,8 +3,10 @@ package com.adamian.learningzone.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.adamian.learningzone.ui.chapterscreen.ChapterScreen
 import com.adamian.learningzone.ui.homescreen.HomeScreen
 import com.adamian.learningzone.ui.loginscreen.LoginView
@@ -66,8 +68,11 @@ private fun addQuizScreen(
     navController: NavHostController,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = NavRoute.Quiz.path) {
-        QuizScreen(
-        )
+    navGraphBuilder.composable(
+        route = NavRoute.Quiz.path,
+        arguments = listOf(navArgument("chapterId") { type = NavType.IntType }) // Define argument type
+    ) { backStackEntry ->
+        val chapterId = backStackEntry.arguments?.getInt("chapterId") ?: 0 // Retrieve the chapterId argument
+        QuizScreen(chapterId = chapterId) // Pass the argument to the QuizScreen
     }
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.adamian.learningzone.R
+import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 @Composable
@@ -82,61 +83,100 @@ fun ChapterScreen(navController: NavController) {
                     Spacer(modifier = Modifier.padding(20.dp))
 
                     ChapterCard(
+                        id = 1,
                         iconResId = R.drawable.problem_analysis,
                         title = "Κεφάλαιο 1",
-                        subtitle = "Ανάλυση Προβλήματος"
+                        subtitle = "Ανάλυση Προβλήματος",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
                     ChapterCard(
+                        id = 2,
                         iconResId = R.drawable.basic_algorithm_concept,
                         title = "Κεφάλαιο 2",
-                        subtitle = "Βασικές Έννοιες Αλγορίθμων"
+                        subtitle = "Βασικές Έννοιες Αλγορίθμων",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
                     ChapterCard(
+                        id = 3,
                         iconResId = R.drawable.data_stractures_algorithms,
                         title = "Κεφάλαιο 3",
-                        subtitle = "Δομές Δεδομένων και Αλγόριθμοι"
+                        subtitle = "Δομές Δεδομένων και Αλγόριθμοι",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
 
                     ChapterCard(
+                        id = 4,
                         iconResId = R.drawable.algorithm_design_techniques,
                         title = "Κεφάλαιο 4",
-                        subtitle = "Τεχνικές Σχεδίασης Αλγόριθμων"
+                        subtitle = "Τεχνικές Σχεδίασης Αλγόριθμων",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
 
                     ChapterCard(
+                        id = 6,
                         iconResId = R.drawable.introduction_programming,
                         title = "Κεφάλαιο 6",
-                        subtitle = "Εισαγωγή στον Προγραμματισμό"
+                        subtitle = "Εισαγωγή στον Προγραμματισμό",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
 
                     ChapterCard(
+                        id = 7,
                         iconResId = R.drawable.basic_programming_concepts,
                         title = "Κεφάλαιο 7",
-                        subtitle = "Βασικές Έννοιες Προγραμματισμού"
+                        subtitle = "Βασικές Έννοιες Προγραμματισμού",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
 
                     ChapterCard(
+                        id = 8,
                         iconResId = R.drawable.select_n_repeat,
                         title = "Κεφάλαιο 8",
-                        subtitle = "Επιλογή και Επανάληψη"
+                        subtitle = "Επιλογή και Επανάληψη",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
 
                     ChapterCard(
+                        id = 9,
                         iconResId = R.drawable.matrix,
                         title = "Κεφάλαιο 9",
-                        subtitle = "Πίνακες"
+                        subtitle = "Πίνακες",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
                     ChapterCard(
+                        id = 10,
                         iconResId = R.drawable.subprograms,
                         title = "Κεφάλαιο 10",
-                        subtitle = "Υποπρογράμματα"
+                        subtitle = "Υποπρογράμματα",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
                     ChapterCard(
+                        id = 13,
                         iconResId = R.drawable.debbuging,
                         title = "Κεφάλαιο 13",
-                        subtitle = "Εκσφαλμάτωση Προγράμματος"
+                        subtitle = "Εκσφαλμάτωση Προγράμματος",
+                        onClick = { chapterId ->
+                            navController.navigate(NavRoute.quizRoute(chapterId))
+                        }
                     )
-
                 }
             }
         }
@@ -145,9 +185,11 @@ fun ChapterScreen(navController: NavController) {
 
 @Composable
 fun ChapterCard(
+    id: Int,
     iconResId: Int,
     title: String,
-    subtitle: String
+    subtitle: String,
+    onClick: (Int) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
@@ -155,6 +197,7 @@ fun ChapterCard(
             defaultElevation = 6.dp
         ),
         modifier = Modifier
+            .clickable { onClick(id) }
             .padding(16.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp)

@@ -36,7 +36,10 @@ import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 @Composable
-fun QuizScreen(viewModel: QuizScreenViewModel = hiltViewModel()) {
+fun QuizScreen(
+    chapterId: Int,
+    viewModel: QuizScreenViewModel = hiltViewModel()
+) {
     val questions by viewModel.questions.collectAsState()
     val currentQuestionIndex by viewModel.currentQuestionIndex.collectAsState()
     val selectedAnswer by viewModel.selectedAnswer.collectAsState()
@@ -70,6 +73,8 @@ fun QuizScreen(viewModel: QuizScreenViewModel = hiltViewModel()) {
                     modifier = Modifier
                         .offset(y = 260.dp)
                 )
+
+                Text(text = "Quiz for Chapter $chapterId")
 
                 currentQuestion?.let {
                     Column(
