@@ -22,7 +22,10 @@ class GetQuestionsUC @Inject constructor(
                 ),
                 correctOption = questionEntity.correctOption ?: "",
                 chapter = questionEntity.chapter ?: 0,
-                level = questionEntity.level ?: 0
+                level = questionEntity.level ?: 0,
+                right = questionEntity.right ?:0,
+                wrong = questionEntity.wrong ?:0,
+                answered = questionEntity.answered ?:0
             )
         }
     }

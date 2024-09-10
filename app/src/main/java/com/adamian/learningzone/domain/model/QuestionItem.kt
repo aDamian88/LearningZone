@@ -8,5 +8,8 @@ data class QuestionItem(
     val options: List<String?>,
     val correctOption: String,
     val chapter: Int,
-    val level: Int
+    val level: Int,
+    val right: Int,
+    val wrong: Int,
+    val answered: Int
 )

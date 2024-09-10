@@ -14,7 +14,10 @@ internal fun QuestionItem.toQuestionEntity(): QuestionEntity {
         fourthOption = options[3],
         correctOption = correctOption,
         chapter = chapter,
-        level = level
+        level = level,
+        right = right,
+        wrong = wrong,
+        answered = answered
     )
 }
 
@@ -26,6 +29,9 @@ internal fun QuestionEntity.toQuestionItem(): QuestionItem {
         options = listOf(firstOption, secondOption, thirdOption, fourthOption),
         correctOption = correctOption ?: "",
         chapter = chapter ?: 0,
-        level = level ?: 0
+        level = level ?: 0,
+        right = right ?: 0,
+        wrong = wrong ?: 0,
+        answered = answered ?: 0
     )
 }
