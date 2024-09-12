@@ -25,12 +25,28 @@ class QuestionRepositoryImp @Inject constructor(
         return appDao.getAllQuestions()
     }
 
+    override suspend fun getQuestionsByChapter(chapterId: Int): List<QuestionEntity> {
+        return appDao.getQuestionsByChapter(chapterId)
+    }
+
     override suspend fun insertAll(vararg questions: QuestionEntity) {
         appDao.insertAll(*questions)
     }
 
     override suspend fun isDatabaseEmpty(): Boolean {
         return appDao.getRowCount() == 0
+    }
+
+    override suspend fun incrementRight(questionId: Int) {
+        appDao.incrementRight(questionId)
+    }
+
+    override suspend fun incrementWrong(questionId: Int) {
+        appDao.incrementWrong(questionId)
+    }
+
+    override suspend fun incrementAnswered(questionId: Int) {
+        appDao.incrementAnswered(questionId)  // Call DAO method to increment 'answered'
     }
 
 }

@@ -424,9 +424,11 @@ fun AverageFrame(modifier: Modifier = Modifier) {
             )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {

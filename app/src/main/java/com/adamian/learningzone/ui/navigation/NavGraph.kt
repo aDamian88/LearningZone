@@ -73,6 +73,9 @@ private fun addQuizScreen(
         arguments = listOf(navArgument("chapterId") { type = NavType.IntType }) // Define argument type
     ) { backStackEntry ->
         val chapterId = backStackEntry.arguments?.getInt("chapterId") ?: 0 // Retrieve the chapterId argument
-        QuizScreen(chapterId = chapterId) // Pass the argument to the QuizScreen
+        QuizScreen(
+            chapterId = chapterId,
+            navController = navController
+        )
     }
 }

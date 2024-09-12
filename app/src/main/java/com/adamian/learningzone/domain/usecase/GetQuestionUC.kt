@@ -7,10 +7,11 @@ import javax.inject.Inject
 class GetQuestionsUC @Inject constructor(
     private val repository: QuestionRepository
 ) {
-    suspend operator fun invoke(): List<QuestionItem> {
-        return repository.getAllQuestions()
+    suspend operator fun invoke(chapterId: Int): List<QuestionItem> {
+        return repository.getQuestionsByChapter(chapterId)
             .map { questionEntity ->
             QuestionItem(
+                id = questionEntity.id,
                 title = questionEntity.title ?: "",
                 question = questionEntity.question ?: "",
                 answerDescription = questionEntity.answerDescription ?: "",
@@ -23,10 +24,10 @@ class GetQuestionsUC @Inject constructor(
                 correctOption = questionEntity.correctOption ?: "",
                 chapter = questionEntity.chapter ?: 0,
                 level = questionEntity.level ?: 0,
-                right = questionEntity.right ?:0,
-                wrong = questionEntity.wrong ?:0,
+                right = questionEntity.right,
+                wrong = questionEntity.wrong,
                 answered = questionEntity.answered ?:0
             )
-        }
+        }.filter { it.isLearned().not() }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.domain.usecase.GetQuestionsUC
+import com.adamian.learningzone.domain.usecase.UpdateQuestionStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizScreenViewModel @Inject constructor(
-    private val getQuestionsUseCase: GetQuestionsUC
+    private val getQuestionsUseCase: GetQuestionsUC,
+    private val updateQuestionStatsUC: UpdateQuestionStatsUC
 ) : ViewModel() {
 
     private val _questions = MutableStateFlow<List<QuestionItem>>(emptyList())
@@ -28,13 +30,25 @@ class QuizScreenViewModel @Inject constructor(
     private val _showResult = MutableStateFlow(false)
     val showResult: StateFlow<Boolean> = _showResult.asStateFlow()
 
-    init {
+    private val _quizFinished = MutableStateFlow(false)
+    val quizFinished: StateFlow<Boolean> = _quizFinished.asStateFlow()
+
+    private val _correctCount = MutableStateFlow(0)
+    val correctCount: StateFlow<Int> = _correctCount.asStateFlow()
+
+    private val _wrongCount = MutableStateFlow(0)
+    val wrongCount: StateFlow<Int> = _wrongCount.asStateFlow()
+
+    private var chapterId: Int = 0
+
+    fun setChapterId(chapterId: Int) {
+        this.chapterId = chapterId
         loadQuestions()
     }
 
     private fun loadQuestions() {
         viewModelScope.launch {
-            val questions = getQuestionsUseCase()
+            val questions = getQuestionsUseCase(chapterId)
             _questions.value = questions
         }
     }
@@ -42,13 +56,39 @@ class QuizScreenViewModel @Inject constructor(
     fun selectAnswer(answer: String) {
         _selectedAnswer.value = answer
         _showResult.value = true
+
+        val currentQuestion = _questions.value.getOrNull(_currentQuestionIndex.value)
+        currentQuestion?.let {
+            updateStats(it.id, answer == it.correctOption)
+            updateAnswered(it.id)
+        }
     }
 
     fun nextQuestion() {
         if (_currentQuestionIndex.value < _questions.value.size - 1) {
             _currentQuestionIndex.value++
             _selectedAnswer.value = null
-            _showResult.value = false
+        } else {
+            _quizFinished.value = true
+        }
+        _showResult.value = false
+    }
+
+    private fun updateStats(questionId: Int, isCorrect: Boolean) {
+        viewModelScope.launch {
+            if (isCorrect) {
+                _correctCount.value++
+                updateQuestionStatsUC.incrementRight(questionId)
+            } else {
+                _wrongCount.value++
+                updateQuestionStatsUC.incrementWrong(questionId)
+            }
+        }
+    }
+
+    private fun updateAnswered(questionId: Int) {
+        viewModelScope.launch {
+            updateQuestionStatsUC.incrementAnswered(questionId)
         }
     }
 }

@@ -23,6 +23,7 @@ internal fun QuestionItem.toQuestionEntity(): QuestionEntity {
 
 internal fun QuestionEntity.toQuestionItem(): QuestionItem {
     return QuestionItem(
+        id = id,
         title = title ?: "",
         question = question ?: "",
         answerDescription = answerDescription ?: "",

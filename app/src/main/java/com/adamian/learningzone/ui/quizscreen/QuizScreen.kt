@@ -1,5 +1,7 @@
 package com.adamian.learningzone.ui.quizscreen
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,18 +35,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 @Composable
 fun QuizScreen(
     chapterId: Int,
+    navController: NavController,
     viewModel: QuizScreenViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(chapterId) {
+        viewModel.setChapterId(chapterId)
+    }
+
     val questions by viewModel.questions.collectAsState()
     val currentQuestionIndex by viewModel.currentQuestionIndex.collectAsState()
     val selectedAnswer by viewModel.selectedAnswer.collectAsState()
     val showResult by viewModel.showResult.collectAsState()
+    val quizFinished by viewModel.quizFinished.collectAsState()
+    val correctCount by viewModel.correctCount.collectAsState()
+    val wrongCount by viewModel.wrongCount.collectAsState()
 
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
 
@@ -85,18 +98,29 @@ fun QuizScreen(
                         QuestionBox(question = it.question)
                         Spacer(modifier = Modifier.padding(10.dp))
                         it.options.forEach { option ->
-                            AnswerCard(
-                                answer = option ?: "",
-                                isSelected = selectedAnswer == option,
-                                onClick = { viewModel.selectAnswer(option ?: "") }
-                            )
+                            if (option?.isNotEmpty() == true) {
+                                AnswerCard(
+                                    answer = option ?: "",
+                                    isSelected = selectedAnswer == option,
+                                    onClick = { viewModel.selectAnswer(option ?: "") }
+                                )
+                            }
                         }
                     }
 
-                    if (showResult) {
+                    if (showResult && !quizFinished) {
                         ResultDialog(
                             isCorrect = selectedAnswer == it.correctOption,
                             onDismiss = { viewModel.nextQuestion() }
+                        )
+                    }
+
+                    if (quizFinished) {
+                        SummaryDialog(
+                            correctCount = correctCount,
+                            wrongCount = wrongCount,
+                            onRestart = { },
+                            onNavigateBack = { navController.navigateUp() }  // Navigate back to ChaptersScreen
                         )
                     }
                 }
@@ -119,7 +143,6 @@ fun QuestionBox(question: String) {
             .clip(RoundedCornerShape(10.dp))
             .background(LearningZoneAppTheme.colorScheme.background)
     ) {
-
         Column(
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
@@ -139,7 +162,6 @@ fun QuestionBox(question: String) {
                 style = LearningZoneAppTheme.typography.labelLarge
             )
             Spacer(modifier = Modifier.padding(10.dp))
-
         }
     }
 }
@@ -181,6 +203,30 @@ fun ResultDialog(isCorrect: Boolean, onDismiss: () -> Unit) {
         confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text("Next")
+            }
+        }
+    )
+}
+
+@Composable
+fun SummaryDialog(
+    correctCount: Int,
+    wrongCount: Int,
+    onRestart: () -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onRestart,
+        title = { Text(text = "Quiz Summary") },
+        text = { Text(text = "Correct Answers: $correctCount\nWrong Answers: $wrongCount") },
+        confirmButton = {
+            TextButton(onClick = onRestart) {
+                Text("Restart")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onNavigateBack) {  // Add a button to navigate back to ChaptersScreen
+                Text("Back to Chapters")
             }
         }
     )
