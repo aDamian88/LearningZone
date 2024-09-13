@@ -47,9 +47,6 @@ private fun addHomeScreen(
         HomeScreen(
             navigateToChapters = { _ ->
                 navController.navigate(NavRoute.Chapters.path)
-            },
-            navigateToQuiz = { _ ->
-                navController.navigate(NavRoute.Quiz.path)
             }
         )
     }

@@ -24,6 +24,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
@@ -41,13 +43,15 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 @Composable
 fun HomeScreen(
     navigateToChapters: (Int) -> Unit,
-    navigateToQuiz: (Int) -> Unit
+    viewModel: HomeScreenVM = hiltViewModel()
 ) {
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showStatsBottomSheet by remember { mutableStateOf(false) }
     var showSubscriptionBottomSheet by remember { mutableStateOf(false) }
+    val appStats by viewModel.appStats.collectAsState()
+
 
     Scaffold { padding ->
         Box(
@@ -87,7 +91,7 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .weight(0.8f) // Distribute vertical space
+                        .weight(0.8f)
                         .fillMaxWidth()
                 ) {
                     Text(
@@ -100,11 +104,14 @@ fun HomeScreen(
                     )
                 }
 
-                AverageFrame(
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
-                )
+                appStats?.let {
+                    AverageFrame(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxWidth(),
+                        completion = it.completionPercentage
+                    )
+                }
 
                 HomeCard(
                     modifier = Modifier
@@ -239,18 +246,18 @@ fun HomeScreen(
                                         end = 8.dp,
                                         bottom = 8.dp
                                     ),
-                                topText = "Συνολικά",
-                                centerText = "Κουίζ",
-                                bottomText = "223",
+                                topText = "Συνολικές",
+                                centerText = "Ερωτήσεις",
+                                bottomText = appStats?.totalQuestions.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
                             )
                             SquareCard(
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(8.dp),
-                                topText = "Ολοκληρωμένα",
-                                centerText = "Κουίζ",
-                                bottomText = "90",
+                                topText = "Συνολικές",
+                                centerText = "Απαντήσεις",
+                                bottomText = appStats?.totalAnswers.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
                             )
                         }
@@ -269,7 +276,7 @@ fun HomeScreen(
                                     ),
                                 topText = "Απαντήσεις",
                                 centerText = "Σωστές",
-                                bottomText = "123",
+                                bottomText = appStats?.totalCorrectAnswers.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
                             )
                             SquareCard(
@@ -278,7 +285,7 @@ fun HomeScreen(
                                     .padding(8.dp),
                                 topText = "Απαντήσεις",
                                 centerText = "Λάθος",
-                                bottomText = "123",
+                                bottomText = appStats?.totalWrongAnswers.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
                             )
                         }
@@ -410,7 +417,10 @@ fun SquareCard(
 
 
 @Composable
-fun AverageFrame(modifier: Modifier = Modifier) {
+fun AverageFrame(
+    modifier: Modifier = Modifier,
+    completion: Double
+) {
     Box(
         modifier = modifier
             .padding(16.dp)
@@ -433,8 +443,8 @@ fun AverageFrame(modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 QuizProgressIndicator(
-                    progress = 0.8f,
-                    correctAnswersPercentage = 80
+                    progress = completion.toFloat(),
+                    correctAnswersPercentage = (completion * 100).toInt()
                 )
                 Spacer(modifier = Modifier.width(18.dp))
                 Column {

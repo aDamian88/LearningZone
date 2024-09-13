@@ -20,4 +20,10 @@ data class QuestionEntity(
     @ColumnInfo(name = "right") val right: Int = 0,
     @ColumnInfo(name = "wrong") val wrong: Int = 0,
     @ColumnInfo(name = "answered") val answered: Int?,
-)
+) {
+    fun isLearned(): Boolean {
+        val totalAttempts = right + wrong
+        val correctnessRatio = if (totalAttempts > 0) (right.toDouble() / totalAttempts) * 100 else 0.0
+        return correctnessRatio >= 80 && totalAttempts >= 3
+    }
+}
