@@ -21,9 +21,22 @@ data class QuestionEntity(
     @ColumnInfo(name = "wrong") val wrong: Int = 0,
     @ColumnInfo(name = "answered") val answered: Int?,
 ) {
+    // Parameters for the learning formula
+    private val rightAnswerWeight = 1.0
+    private val wrongAnswerWeight = 0.5
+    private val decayFactor = 0.9 // Decay factor to reduce the impact of older mistakes
+
+    // Minimum score to consider a question 'learned'
+    private val learningThreshold = 2.0
+
     fun isLearned(): Boolean {
-        val totalAttempts = right + wrong
-        val correctnessRatio = if (totalAttempts > 0) (right.toDouble() / totalAttempts) * 100 else 0.0
-        return correctnessRatio >= 80 && totalAttempts >= 3
+        // Apply an exponential decay formula to calculate the effective number of wrong answers
+        val effectiveWrong = wrong * wrongAnswerWeight * Math.pow(decayFactor, right.toDouble())
+
+        // Calculate the weighted score
+        val score = (right * rightAnswerWeight) - effectiveWrong
+
+        // Determine if the question is learned based on the threshold
+        return score >= learningThreshold
     }
 }
