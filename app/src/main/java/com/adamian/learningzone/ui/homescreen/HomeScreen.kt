@@ -246,8 +246,8 @@ fun HomeScreen(
                                         end = 8.dp,
                                         bottom = 8.dp
                                     ),
-                                topText = "Συνολικές",
-                                centerText = "Ερωτήσεις",
+                                topText = "Ερωτήσεις",
+                                centerText = "Σύνολο",
                                 bottomText = appStats?.totalQuestions.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
                             )
@@ -255,8 +255,8 @@ fun HomeScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(8.dp),
-                                topText = "Συνολικές",
-                                centerText = "Απαντήσεις",
+                                topText = "Απαντήσεις",
+                                centerText = "Σύνολο",
                                 bottomText = appStats?.totalAnswers.toString(),
                                 backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
                             )

@@ -21,6 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,13 +32,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 
 @Composable
-fun ChapterScreen(navController: NavController) {
+fun ChapterScreen(
+    navController: NavController,
+    viewModel: ChapterScreenVM = hiltViewModel()
+) {
+
+    val chapterProgress by viewModel.chapterLearningProgress.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadChapterLearningProgress()
+    }
 
     Scaffold { padding ->
         Box(
@@ -87,6 +100,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.problem_analysis,
                         title = "Κεφάλαιο 1",
                         subtitle = "Ανάλυση Προβλήματος",
+                        chapterProgress = chapterProgress[1].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -96,6 +110,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.basic_algorithm_concept,
                         title = "Κεφάλαιο 2",
                         subtitle = "Βασικές Έννοιες Αλγορίθμων",
+                        chapterProgress = chapterProgress[2].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -105,6 +120,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.data_stractures_algorithms,
                         title = "Κεφάλαιο 3",
                         subtitle = "Δομές Δεδομένων και Αλγόριθμοι",
+                        chapterProgress = chapterProgress[3].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -115,6 +131,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.algorithm_design_techniques,
                         title = "Κεφάλαιο 4",
                         subtitle = "Τεχνικές Σχεδίασης Αλγόριθμων",
+                        chapterProgress = chapterProgress[4].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -125,6 +142,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.introduction_programming,
                         title = "Κεφάλαιο 6",
                         subtitle = "Εισαγωγή στον Προγραμματισμό",
+                        chapterProgress = chapterProgress[6].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -135,6 +153,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.basic_programming_concepts,
                         title = "Κεφάλαιο 7",
                         subtitle = "Βασικές Έννοιες Προγραμματισμού",
+                        chapterProgress = chapterProgress[7].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -145,6 +164,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.select_n_repeat,
                         title = "Κεφάλαιο 8",
                         subtitle = "Επιλογή και Επανάληψη",
+                        chapterProgress = chapterProgress[8].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -155,6 +175,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.matrix,
                         title = "Κεφάλαιο 9",
                         subtitle = "Πίνακες",
+                        chapterProgress = chapterProgress[9].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -164,6 +185,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.subprograms,
                         title = "Κεφάλαιο 10",
                         subtitle = "Υποπρογράμματα",
+                        chapterProgress = chapterProgress[10].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -173,6 +195,7 @@ fun ChapterScreen(navController: NavController) {
                         iconResId = R.drawable.debbuging,
                         title = "Κεφάλαιο 13",
                         subtitle = "Εκσφαλμάτωση Προγράμματος",
+                        chapterProgress = chapterProgress[13].toString(),
                         onClick = { chapterId ->
                             navController.navigate(NavRoute.quizRoute(chapterId))
                         }
@@ -189,6 +212,7 @@ fun ChapterCard(
     iconResId: Int,
     title: String,
     subtitle: String,
+    chapterProgress: String,
     onClick: (Int) -> Unit
 ) {
     Card(
@@ -202,50 +226,60 @@ fun ChapterCard(
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+        Column(
+
         ) {
-            Card(
-                colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary),
-                modifier = Modifier
-                    .size(100.dp),
-                shape = RoundedCornerShape(8.dp),
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(16.dp)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
+                Card(
+                    colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary),
+                    modifier = Modifier
+                        .size(100.dp),
+                    shape = RoundedCornerShape(8.dp),
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = iconResId),
-                        tint = Color.Unspecified,
-                        contentDescription = null,
-                        modifier = Modifier.size(70.dp)
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = iconResId),
+                            tint = Color.Unspecified,
+                            contentDescription = null,
+                            modifier = Modifier.size(70.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(18.dp))
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = title,
+                        style = LearningZoneAppTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = subtitle,
+                        style = LearningZoneAppTheme.typography.labelLarge,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
-            }
-            Spacer(modifier = Modifier.width(18.dp))
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = title,
-                    style = LearningZoneAppTheme.typography.titleLarge
-                )
-                Text(
-                    text = subtitle,
-                    style = LearningZoneAppTheme.typography.labelLarge,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                Spacer(modifier = Modifier.width(18.dp))
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.chapter_arrow_icon),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(35.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(18.dp))
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.chapter_arrow_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(35.dp)
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = "Ποσοστό ολοκλήρωσης: ${chapterProgress}%",
+                style = LearningZoneAppTheme.typography.bodyBold
             )
         }
     }

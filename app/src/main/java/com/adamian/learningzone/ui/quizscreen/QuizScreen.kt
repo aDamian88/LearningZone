@@ -1,7 +1,6 @@
 package com.adamian.learningzone.ui.quizscreen
 
-import android.content.ContentValues.TAG
-import android.util.Log
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -100,9 +99,9 @@ fun QuizScreen(
                         it.options.forEach { option ->
                             if (option?.isNotEmpty() == true) {
                                 AnswerCard(
-                                    answer = option ?: "",
+                                    answer = option,
                                     isSelected = selectedAnswer == option,
-                                    onClick = { viewModel.selectAnswer(option ?: "") }
+                                    onClick = { viewModel.selectAnswer(answer = option) }
                                 )
                             }
                         }

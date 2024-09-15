@@ -3,6 +3,7 @@ package com.adamian.learningzone.data.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlin.math.pow
 
 @Entity
 data class QuestionEntity(
@@ -21,17 +22,18 @@ data class QuestionEntity(
     @ColumnInfo(name = "wrong") val wrong: Int = 0,
     @ColumnInfo(name = "answered") val answered: Int?,
 ) {
-    // Parameters for the learning formula
-    private val rightAnswerWeight = 1.0
-    private val wrongAnswerWeight = 0.5
-    private val decayFactor = 0.9 // Decay factor to reduce the impact of older mistakes
-
-    // Minimum score to consider a question 'learned'
-    private val learningThreshold = 2.0
 
     fun isLearned(): Boolean {
+
+        // Parameters for the learning formula
+        val rightAnswerWeight = 1.0
+        val wrongAnswerWeight = 0.5
+        val decayFactor = 0.9 // Decay factor to reduce the impact of older mistakes
+
+        // Minimum score to consider a question 'learned'
+        val learningThreshold = 2.0
         // Apply an exponential decay formula to calculate the effective number of wrong answers
-        val effectiveWrong = wrong * wrongAnswerWeight * Math.pow(decayFactor, right.toDouble())
+        val effectiveWrong = wrong * wrongAnswerWeight * decayFactor.pow(right.toDouble())
 
         // Calculate the weighted score
         val score = (right * rightAnswerWeight) - effectiveWrong
