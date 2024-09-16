@@ -24,7 +24,7 @@ class HomeScreenVM @Inject constructor(
         loadAppStats()
     }
 
-    private fun loadAppStats() {
+    fun loadAppStats() {
         viewModelScope.launch {
             val stats = getAppStatsUC()
             _appStats.value = stats

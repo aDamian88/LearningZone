@@ -86,14 +86,20 @@ fun QuizScreen(
                         .offset(y = 260.dp)
                 )
 
-                Text(text = "Quiz for Chapter $chapterId")
-
                 currentQuestion?.let {
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .verticalScroll(rememberScrollState())
                     ) {
+                        Text(
+                            text = currentQuestion.title,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(16.dp),
+                            style = LearningZoneAppTheme.typography.titleLarge
+                        )
+
                         QuestionBox(question = it.question)
                         Spacer(modifier = Modifier.padding(10.dp))
                         it.options.forEach { option ->
@@ -119,7 +125,7 @@ fun QuizScreen(
                             correctCount = correctCount,
                             wrongCount = wrongCount,
                             onRestart = { },
-                            onNavigateBack = { navController.navigateUp() }  // Navigate back to ChaptersScreen
+                            onNavigateBack = { navController.navigateUp() }
                         )
                     }
                 }
@@ -197,11 +203,11 @@ fun AnswerCard(answer: String, isSelected: Boolean, onClick: () -> Unit) {
 fun ResultDialog(isCorrect: Boolean, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = if (isCorrect) "Correct!" else "Incorrect") },
-        text = { Text(text = if (isCorrect) "Well done!" else "Try again.") },
+        title = { Text(text = if (isCorrect) "Σωστή απάντηση!" else "Λάθος απάντηση") },
+        text = { Text(text = if (isCorrect) "Πολύ καλά!" else "Προσπάθησε ξανά.") },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Next")
+                Text("Επόμενο")
             }
         }
     )
@@ -216,16 +222,11 @@ fun SummaryDialog(
 ) {
     AlertDialog(
         onDismissRequest = onRestart,
-        title = { Text(text = "Quiz Summary") },
-        text = { Text(text = "Correct Answers: $correctCount\nWrong Answers: $wrongCount") },
+        title = { Text(text = "Σύνοψη κουίζ") },
+        text = { Text(text = "Σωστές απαντήσεις: $correctCount\nΛάθος απαντήσεις: $wrongCount") },
         confirmButton = {
-            TextButton(onClick = onRestart) {
-                Text("Restart")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onNavigateBack) {  // Add a button to navigate back to ChaptersScreen
-                Text("Back to Chapters")
+            TextButton(onClick = onNavigateBack) {
+                Text("Πίσω στα κεφάλαια")
             }
         }
     )
