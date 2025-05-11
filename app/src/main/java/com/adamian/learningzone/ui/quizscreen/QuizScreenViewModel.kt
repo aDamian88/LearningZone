@@ -30,6 +30,9 @@ class QuizScreenViewModel @Inject constructor(
     private val _showResult = MutableStateFlow(false)
     val showResult: StateFlow<Boolean> = _showResult.asStateFlow()
 
+    private val _showExit = MutableStateFlow(false)
+    val showExit: StateFlow<Boolean> = _showExit.asStateFlow()
+
     private val _quizFinished = MutableStateFlow(false)
     val quizFinished: StateFlow<Boolean> = _quizFinished.asStateFlow()
 
@@ -55,6 +58,10 @@ class QuizScreenViewModel @Inject constructor(
 
     fun selectAnswer(answer: String) {
         _selectedAnswer.value = answer
+    }
+
+    fun submitAnswer(answer: String) {
+        _selectedAnswer.value = answer
         _showResult.value = true
 
         val currentQuestion = _questions.value.getOrNull(_currentQuestionIndex.value)
@@ -62,6 +69,14 @@ class QuizScreenViewModel @Inject constructor(
             updateStats(it.id, answer == it.correctOption)
             updateAnswered(it.id)
         }
+    }
+
+    fun exitQuizSheet() {
+        _showExit.value = true
+    }
+
+    fun closeExitQuizSheet() {
+        _showExit.value = false
     }
 
     fun nextQuestion() {
