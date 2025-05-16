@@ -7,8 +7,11 @@ import com.adamian.learningzone.domain.usecase.GetQuestionsUC
 import com.adamian.learningzone.domain.usecase.UpdateQuestionStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +21,7 @@ class QuizScreenViewModel @Inject constructor(
     private val updateQuestionStatsUC: UpdateQuestionStatsUC
 ) : ViewModel() {
 
+    // todo merge all flows to one uiState
     private val _questions = MutableStateFlow<List<QuestionItem>>(emptyList())
     val questions: StateFlow<List<QuestionItem>> = _questions.asStateFlow()
 
@@ -41,6 +45,15 @@ class QuizScreenViewModel @Inject constructor(
 
     private val _wrongCount = MutableStateFlow(0)
     val wrongCount: StateFlow<Int> = _wrongCount.asStateFlow()
+
+    // 🔥 Progress as StateFlow
+    val progress: StateFlow<Float> = combine(_currentQuestionIndex, _questions) { index, questions ->
+        if (questions.isNotEmpty()) {
+            (index + 1).toFloat() / questions.size
+        } else {
+            0f
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0f)
 
     private var chapterId: Int = 0
 

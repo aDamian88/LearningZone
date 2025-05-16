@@ -58,8 +58,9 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import kotlinx.coroutines.launch
 
 //// next steps
-//// 1. progress bar functionality
-//// 2. complete quiz screen
+//// - complete quiz screen
+//// - lets check the errors screen (after the re-quiz)
+//// - Animations
 //// ? exit bug
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,6 +83,7 @@ fun QuizScreen(
     val quizFinished by viewModel.quizFinished.collectAsState()
     val correctCount by viewModel.correctCount.collectAsState()
     val wrongCount by viewModel.wrongCount.collectAsState()
+    val progress by viewModel.progress.collectAsState()
 
 
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
@@ -110,7 +112,7 @@ fun QuizScreen(
                         .background(LearningZoneAppTheme.colorScheme.background)
                 ) {
                     LinearProgressIndicator(
-                        progress = { 0.3f },
+                        progress = { progress },
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp)),
