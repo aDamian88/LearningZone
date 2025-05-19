@@ -8,6 +8,11 @@ sealed class NavRoute(val path: String) {
     object Quiz: NavRoute("quiz/{chapterId}")
 
     companion object {
-        fun quizRoute(chapterId: Int) = "quiz/$chapterId" // Helper function to create route with argument
+        fun quizRoute(chapterId: Int) = "quiz/$chapterId"
     }
+
+    object Summary : NavRoute("summary/{correct}/{wrong}") {
+        fun createRoute(correct: Int, wrong: Int) = "summary/$correct/$wrong"
+    }
+
 }

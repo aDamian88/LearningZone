@@ -1,6 +1,7 @@
 package com.adamian.learningzone.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +12,7 @@ import com.adamian.learningzone.ui.chapterscreen.ChapterScreen
 import com.adamian.learningzone.ui.homescreen.HomeScreen
 import com.adamian.learningzone.ui.loginscreen.LoginView
 import com.adamian.learningzone.ui.quizscreen.QuizScreen
+import com.adamian.learningzone.ui.summaryscreen.SummaryScreen
 
 
 @Composable
@@ -23,6 +25,7 @@ fun NavGraph(navController: NavHostController) {
         addHomeScreen(navController,this)
         addChapterScreen(navController,this)
         addQuizScreen(navController,this)
+        addSummaryScreen(navController, this)
     }
 }
 
@@ -76,3 +79,30 @@ private fun addQuizScreen(
         )
     }
 }
+
+fun addSummaryScreen(
+    navController: NavController,
+    navGraphBuilder: NavGraphBuilder
+) {
+    navGraphBuilder.composable(
+        route = NavRoute.Summary.path,
+        arguments = listOf(
+            navArgument("correct") { type = NavType.IntType },
+            navArgument("wrong") { type = NavType.IntType }
+        )
+    ) { backStackEntry ->
+        val correct = backStackEntry.arguments?.getInt("correct") ?: 0
+        val wrong = backStackEntry.arguments?.getInt("wrong") ?: 0
+
+        SummaryScreen(
+            correctCount = correct,
+            wrongCount = wrong,
+            onNavigateHome = {
+                navController.navigate(NavRoute.Home.path) {
+                    popUpTo(NavRoute.Home.path) { inclusive = true }
+                }
+            }
+        )
+    }
+}
+

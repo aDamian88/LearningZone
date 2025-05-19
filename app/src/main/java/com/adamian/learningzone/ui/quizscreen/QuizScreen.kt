@@ -54,6 +54,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.adamian.learningzone.domain.model.QuestionItem
+import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import kotlinx.coroutines.launch
 
@@ -191,12 +192,7 @@ fun QuizScreen(
                 }
 
                 if (quizFinished) {
-                    SummaryDialog(
-                        correctCount = correctCount,
-                        wrongCount = wrongCount,
-                        onRestart = { },
-                        onNavigateBack = { navController.navigateUp() }
-                    )
+                    navController.navigate(NavRoute.Summary.createRoute(correctCount, wrongCount))
                 }
             }
         }
@@ -483,23 +479,4 @@ fun SubmitAnswerButton(
             )
         }
     }
-}
-
-@Composable
-fun SummaryDialog(
-    correctCount: Int,
-    wrongCount: Int,
-    onRestart: () -> Unit,
-    onNavigateBack: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onRestart,
-        title = { Text(text = "Σύνοψη κουίζ") },
-        text = { Text(text = "Σωστές απαντήσεις: $correctCount\nΛάθος απαντήσεις: $wrongCount") },
-        confirmButton = {
-            TextButton(onClick = onNavigateBack) {
-                Text("Πίσω στα κεφάλαια")
-            }
-        }
-    )
 }
