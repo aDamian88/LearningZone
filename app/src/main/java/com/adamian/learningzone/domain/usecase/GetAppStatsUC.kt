@@ -16,11 +16,11 @@ class GetAppStatsUC @Inject constructor(
         val totalQuestions = allQuestions.size
 
         // Calculate the number of learned questions
-        val learnedQuestions = allQuestions.count { it.isLearned() }
+        val answeredQuestions = allQuestions.count { it.answered != 0}
 
         // Calculate the completion percentage based on learned questions
         val completionPercentage = if (totalQuestions > 0) {
-            learnedQuestions.toDouble() / totalQuestions
+            answeredQuestions.toDouble() / totalQuestions
         } else {
             0.0
         }

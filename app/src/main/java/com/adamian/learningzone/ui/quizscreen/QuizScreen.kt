@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,7 +30,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -85,7 +83,7 @@ fun QuizScreen(
     val correctCount by viewModel.correctCount.collectAsState()
     val wrongCount by viewModel.wrongCount.collectAsState()
     val progress by viewModel.progress.collectAsState()
-
+    val wrongList = viewModel.wrongQuestions
 
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
 
@@ -184,15 +182,25 @@ fun QuizScreen(
                 }
 
                 if (showExit) {
-                    ExitBottomSheetSample(
+                    ExitBottomSheet(
                         navController = navController,
                         viewModel = viewModel
                     )
-
                 }
 
                 if (quizFinished) {
-                    navController.navigate(NavRoute.Summary.createRoute(correctCount, wrongCount))
+                    if (wrongList.isNotEmpty()) {
+                        CorrectionBottomSheet(
+                            viewModel = viewModel
+                        )
+                    } else {
+                        navController.navigate(
+                            NavRoute.Summary.createRoute(
+                                correctCount,
+                                wrongCount
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -307,7 +315,7 @@ fun AnswerBottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExitBottomSheetSample(navController: NavController, viewModel: QuizScreenViewModel) {
+fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
@@ -379,6 +387,78 @@ fun ExitBottomSheetSample(navController: NavController, viewModel: QuizScreenVie
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
+    val scope = rememberCoroutineScope()
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { false }
+    )
+
+    ModalBottomSheet(
+        onDismissRequest = {},
+        sheetState = sheetState,
+        containerColor = Color.White,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 32.dp)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            awaitPointerEvent()
+                        }
+                    }
+                },
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+
+            Icon(
+                imageVector = Icons.Default.Info,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 4.dp),
+                contentDescription = "Close"
+            )
+            Text(
+                text = "Έκανες κάποια λάθη, πάμε να τα δούμε...",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 4.dp),
+                style = LearningZoneAppTheme.typography.titleNormal
+            )
+            Button(
+                onClick = {
+                    scope.launch {
+                        sheetState.hide()
+                        viewModel.loadWrongQuestions()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+            ) {
+                Text("Ας τα διορθώσουμε!")
+            }
+
+//            Button(
+//                onClick = {
+//                    navController.navigateUp()
+//                    viewModel.closeExitQuizSheet()
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 24.dp, vertical = 4.dp)
+//            ) {
+//                Text("Έξόδος")
+//            }
+        }
+    }
+}
 
 @Composable
 fun QuestionBox(question: String) {

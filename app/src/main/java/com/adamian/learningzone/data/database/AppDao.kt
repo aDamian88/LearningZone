@@ -23,10 +23,10 @@ interface AppDao {
     @Query("SELECT COUNT(*) FROM QuestionEntity")
     suspend fun getRowCount(): Int
 
-    @Query("UPDATE QuestionEntity SET right = right + 1 WHERE id = :questionId")
+    @Query("UPDATE QuestionEntity SET right = right + 1, answered = answered + 1 WHERE id = :questionId")
     suspend fun incrementRight(questionId: Int)
 
-    @Query("UPDATE QuestionEntity SET wrong = wrong + 1 WHERE id = :questionId")
+    @Query("UPDATE QuestionEntity SET wrong = wrong + 1, answered = answered + 1 WHERE id = :questionId")
     suspend fun incrementWrong(questionId: Int)
 
     @Query("UPDATE QuestionEntity SET answered = answered + 1 WHERE id = :questionId")

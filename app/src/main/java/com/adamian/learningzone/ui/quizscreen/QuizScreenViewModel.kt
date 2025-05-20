@@ -1,5 +1,6 @@
 package com.adamian.learningzone.ui.quizscreen
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adamian.learningzone.domain.model.QuestionItem
@@ -46,14 +47,14 @@ class QuizScreenViewModel @Inject constructor(
     private val _wrongCount = MutableStateFlow(0)
     val wrongCount: StateFlow<Int> = _wrongCount.asStateFlow()
 
-    // 🔥 Progress as StateFlow
-    val progress: StateFlow<Float> = combine(_currentQuestionIndex, _questions) { index, questions ->
-        if (questions.isNotEmpty()) {
-            (index + 1).toFloat() / questions.size
-        } else {
-            0f
-        }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0f)
+    val progress: StateFlow<Float> =
+        combine(_currentQuestionIndex, _questions) { index, questions ->
+            if (questions.isNotEmpty()) {
+                (index + 1).toFloat() / questions.size
+            } else {
+                0f
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, 0f)
 
     private var chapterId: Int = 0
 
@@ -69,6 +70,21 @@ class QuizScreenViewModel @Inject constructor(
         }
     }
 
+    private val _wrongQuestions = mutableStateListOf<Int>()
+    val wrongQuestions: List<Int> get() = _wrongQuestions
+
+    fun loadWrongQuestions() {
+        viewModelScope.launch {
+            val allQuestions = _questions.value
+            val filtered = allQuestions.filter { it.id in wrongQuestions }
+            _questions.value = filtered
+            _currentQuestionIndex.value = 0
+            _quizFinished.value = false
+            _selectedAnswer.value = null
+            _wrongQuestions.clear()
+        }
+    }
+
     fun selectAnswer(answer: String) {
         _selectedAnswer.value = answer
     }
@@ -80,7 +96,6 @@ class QuizScreenViewModel @Inject constructor(
         val currentQuestion = _questions.value.getOrNull(_currentQuestionIndex.value)
         currentQuestion?.let {
             updateStats(it.id, answer == it.correctOption)
-            updateAnswered(it.id)
         }
     }
 
@@ -110,13 +125,8 @@ class QuizScreenViewModel @Inject constructor(
             } else {
                 _wrongCount.value++
                 updateQuestionStatsUC.incrementWrong(questionId)
+                _wrongQuestions.add(questionId)
             }
-        }
-    }
-
-    private fun updateAnswered(questionId: Int) {
-        viewModelScope.launch {
-            updateQuestionStatsUC.incrementAnswered(questionId)
         }
     }
 }

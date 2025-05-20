@@ -10,7 +10,7 @@ class GetQuestionsUC @Inject constructor(
     suspend operator fun invoke(chapterId: Int): List<QuestionItem> {
         return repository.getQuestionsByChapter(chapterId)
             .map { questionEntity ->
-            QuestionItem(
+            QuestionItem( // Todo perhaps create a mapper here
                 id = questionEntity.id,
                 title = questionEntity.title ?: "",
                 question = questionEntity.question ?: "",
@@ -28,6 +28,6 @@ class GetQuestionsUC @Inject constructor(
                 wrong = questionEntity.wrong,
                 answered = questionEntity.answered ?:0
             )
-        }.filter { it.isLearned().not() }
+        }.filter { it.isAnswered().not() }.take(10)
     }
 }

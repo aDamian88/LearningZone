@@ -1,6 +1,5 @@
 package com.adamian.learningzone.ui.chapterscreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -63,35 +60,18 @@ fun ChapterScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            var showDialog by remember { mutableStateOf(false) }  // State to control the dialog visibility
+            var showDialog by remember { mutableStateOf(false) }
 
             // Background
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                // Top image
-                Image(
-                    painter = painterResource(id = R.drawable.top_background),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(y = (-260).dp)
-                )
-
-                // Bottom image
-                Image(
-                    painter = painterResource(id = R.drawable.bottom_background),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(y = 260.dp)
-                )
                 Column(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .verticalScroll(rememberScrollState())
-
                 ) {
-
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.home_icon),
                         tint = Color.Unspecified,
@@ -117,7 +97,6 @@ fun ChapterScreen(
                         ChapterData(13, R.drawable.debbuging, "Κεφάλαιο 13", "Εκσφαλμάτωση Προγράμματος")
                     )
 
-                    // Loop through chapters and create ChapterCards
                     chapters.forEach { chapter ->
                         ChapterCardWithProgress(
                             chapter = chapter,
