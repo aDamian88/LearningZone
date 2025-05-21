@@ -1,4 +1,4 @@
-package com.adamian.learningzone.ui.summaryscreen
+package com.adamian.learningzone.ui.quizscreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

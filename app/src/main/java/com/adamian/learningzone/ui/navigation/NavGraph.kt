@@ -12,7 +12,7 @@ import com.adamian.learningzone.ui.chapterscreen.ChapterScreen
 import com.adamian.learningzone.ui.homescreen.HomeScreen
 import com.adamian.learningzone.ui.loginscreen.LoginView
 import com.adamian.learningzone.ui.quizscreen.QuizScreen
-import com.adamian.learningzone.ui.summaryscreen.SummaryScreen
+import com.adamian.learningzone.ui.quizscreen.SummaryScreen
 
 
 @Composable
