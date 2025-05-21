@@ -54,6 +54,7 @@ import androidx.navigation.NavController
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
+import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 import kotlinx.coroutines.launch
 
 //// next steps
@@ -92,7 +93,8 @@ fun QuizScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .background(LearningZoneAppTheme.colorScheme.background),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { viewModel.exitQuizSheet() }) {
@@ -127,6 +129,7 @@ fun QuizScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .background(LearningZoneAppTheme.colorScheme.background)
         ) {
             currentQuestion?.let { question ->
 
@@ -141,7 +144,8 @@ fun QuizScreen(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(16.dp),
-                        style = LearningZoneAppTheme.typography.titleLarge
+                        style = LearningZoneAppTheme.typography.titleLarge,
+                        color = LearningZoneAppTheme.colorScheme.onBackground
                     )
 
                     QuestionBox(question = question.question)
@@ -255,7 +259,7 @@ fun AnswerBottomSheet(
                     Text(
                         text = "Σωστά",
                         style = LearningZoneAppTheme.typography.titleNormal,
-                        modifier = Modifier.weight(0.9f)
+                        modifier = Modifier.weight(0.9f),
                     )
                 } else {
                     Icon(
@@ -297,7 +301,7 @@ fun AnswerBottomSheet(
                     enabled = !whyButtonClicked,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Γιατί;")
+                    Text(text = "Γιατί;")
                 }
 
                 Button(
@@ -334,6 +338,7 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 32.dp)
+                .background(LearningZoneAppTheme.colorScheme.background)
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
@@ -356,7 +361,8 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 4.dp),
-                style = LearningZoneAppTheme.typography.titleNormal
+                style = LearningZoneAppTheme.typography.titleNormal,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
             Button(
                 onClick = {
@@ -400,13 +406,14 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
     ModalBottomSheet(
         onDismissRequest = {},
         sheetState = sheetState,
-        containerColor = Color.White,
+        containerColor = LearningZoneAppTheme.colorScheme.background,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 32.dp)
+
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
@@ -429,7 +436,8 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 4.dp),
-                style = LearningZoneAppTheme.typography.titleNormal
+                style = LearningZoneAppTheme.typography.titleNormal,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
             Button(
                 onClick = {
@@ -444,18 +452,6 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
             ) {
                 Text("Ας τα διορθώσουμε!")
             }
-
-//            Button(
-//                onClick = {
-//                    navController.navigateUp()
-//                    viewModel.closeExitQuizSheet()
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 24.dp, vertical = 4.dp)
-//            ) {
-//                Text("Έξόδος")
-//            }
         }
     }
 }
@@ -484,7 +480,8 @@ fun QuestionBox(question: String) {
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp),
                 text = question,
-                style = LearningZoneAppTheme.typography.titleNormal
+                style = LearningZoneAppTheme.typography.titleNormal,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.padding(10.dp))
         }
@@ -500,16 +497,21 @@ fun AnswerCard(
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
-                LearningZoneAppTheme.colorScheme.background
+                LearningZoneAppTheme.colorScheme.onPrimary
             else
-                Color.White
+                LearningZoneAppTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(20.dp),
+                ambientColor = neonColor.copy(alpha = 0.8f),
+                spotColor = neonColor.copy(alpha = 0.8f)
+            )
             .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp)
     ) {
         Row(
             modifier = Modifier
@@ -521,7 +523,8 @@ fun AnswerCard(
             Text(
                 text = answer,
                 style = LearningZoneAppTheme.typography.labelLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
         }
     }
@@ -552,10 +555,10 @@ fun SubmitAnswerButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Submit",
+                text = "Υποβολή",
                 style = LearningZoneAppTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
-                color = Color.White
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
         }
     }

@@ -51,7 +51,7 @@ val localAppTypography = staticCompositionLocalOf {
         labelLarge = TextStyle(
             fontFamily = Inter,
             fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
+            fontSize = 18.sp
         ),
         labelNormal = TextStyle(
             fontFamily = Inter,

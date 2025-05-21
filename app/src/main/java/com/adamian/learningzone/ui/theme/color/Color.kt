@@ -15,20 +15,22 @@ val gray100 = Color(0XFFEAEEFA)
 val gray800 = Color(0XFF414042)
 
 // Dark Theme Colors
-//val purple700 = Color(0xFFBB86FC)
-//val purple900 = Color(0XFF414042)
-//val teal700 = Color(0xFF03DAC6)
-//val teal900 = Color(0XFF414042)
-//val gray800_2 = Color(0XFF414042)
-//val gray100_2 = Color(0XFFEAEEFA)
+val purple200Dark = Color(0xFFD1A5F3)
+val purple100Dark = Color(0xFF4A004E)
 
-val purple700 = Color(0xFFBB86FC)
-val purple900 = Color(0XFF3700B3)
-val red700 = Color(0xFFB00020)
-val red900 = Color(0xFF3700B3)
-val yellow700 = Color(0xFFFFEB3B)
-val yellow900 = Color(0xFFF57C00)
-val teal700 = Color(0xFF03DAC6)
-val teal900 = Color(0XFF018786)
-val gray800_2 = Color(0XFF121212)
-val gray100_2 = Color(0XFFB3B3B3)
+val red200Dark = Color(0xFFE57373)
+val red100Dark = Color(0xFF5B0000)
+
+val yellow200Dark = Color(0xFFFFF176)
+val yellow100Dark = Color(0xFF6B5B00)
+
+val teal200Dark = Color(0xFF80DEEA)
+val teal100Dark = Color(0xFF004D4D)
+
+val gray100Dark = Color(0xFF121212)
+val gray800Dark = Color(0xFF1E1E1E)
+
+
+// Generic
+val black = Color(0xFF000000)
+val white = Color(0xFFFFFFFF)

@@ -1,5 +1,6 @@
 package com.adamian.learningzone.ui.chapterscreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -40,6 +42,7 @@ import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
+import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 
 @Composable
 fun ChapterScreen(
@@ -59,6 +62,7 @@ fun ChapterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .background(LearningZoneAppTheme.colorScheme.background)
         ) {
             var showDialog by remember { mutableStateOf(false) }
 
@@ -85,16 +89,56 @@ fun ChapterScreen(
                     Spacer(modifier = Modifier.padding(20.dp))
 
                     val chapters = listOf(
-                        ChapterData(1, R.drawable.problem_analysis, "Κεφάλαιο 1", "Ανάλυση Προβλήματος"),
-                        ChapterData(2, R.drawable.basic_algorithm_concept, "Κεφάλαιο 2", "Βασικές Έννοιες Αλγορίθμων"),
-                        ChapterData(3, R.drawable.data_stractures_algorithms, "Κεφάλαιο 3", "Δομές Δεδομένων και Αλγόριθμοι"),
-                        ChapterData(4, R.drawable.algorithm_design_techniques, "Κεφάλαιο 4", "Τεχνικές Σχεδίασης Αλγόριθμων"),
-                        ChapterData(6, R.drawable.introduction_programming, "Κεφάλαιο 6", "Εισαγωγή στον Προγραμματισμό"),
-                        ChapterData(7, R.drawable.basic_programming_concepts, "Κεφάλαιο 7", "Βασικές Έννοιες Προγραμματισμού"),
-                        ChapterData(8, R.drawable.select_n_repeat, "Κεφάλαιο 8", "Επιλογή και Επανάληψη"),
+                        ChapterData(
+                            1,
+                            R.drawable.problem_analysis,
+                            "Κεφάλαιο 1",
+                            "Ανάλυση Προβλήματος"
+                        ),
+                        ChapterData(
+                            2,
+                            R.drawable.basic_algorithm_concept,
+                            "Κεφάλαιο 2",
+                            "Βασικές Έννοιες Αλγορίθμων"
+                        ),
+                        ChapterData(
+                            3,
+                            R.drawable.data_stractures_algorithms,
+                            "Κεφάλαιο 3",
+                            "Δομές Δεδομένων και Αλγόριθμοι"
+                        ),
+                        ChapterData(
+                            4,
+                            R.drawable.algorithm_design_techniques,
+                            "Κεφάλαιο 4",
+                            "Τεχνικές Σχεδίασης Αλγόριθμων"
+                        ),
+                        ChapterData(
+                            6,
+                            R.drawable.introduction_programming,
+                            "Κεφάλαιο 6",
+                            "Εισαγωγή στον Προγραμματισμό"
+                        ),
+                        ChapterData(
+                            7,
+                            R.drawable.basic_programming_concepts,
+                            "Κεφάλαιο 7",
+                            "Βασικές Έννοιες Προγραμματισμού"
+                        ),
+                        ChapterData(
+                            8,
+                            R.drawable.select_n_repeat,
+                            "Κεφάλαιο 8",
+                            "Επιλογή και Επανάληψη"
+                        ),
                         ChapterData(9, R.drawable.matrix, "Κεφάλαιο 9", "Πίνακες"),
                         ChapterData(10, R.drawable.subprograms, "Κεφάλαιο 10", "Υποπρογράμματα"),
-                        ChapterData(13, R.drawable.debbuging, "Κεφάλαιο 13", "Εκσφαλμάτωση Προγράμματος")
+                        ChapterData(
+                            13,
+                            R.drawable.debbuging,
+                            "Κεφάλαιο 13",
+                            "Εκσφαλμάτωση Προγράμματος"
+                        )
                     )
 
                     chapters.forEach { chapter ->
@@ -177,20 +221,19 @@ fun ChapterCard(
     onClick: (Int) -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.background),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
+        colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.surface),
         modifier = Modifier
             .clickable { onClick(id) }
             .padding(16.dp)
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(20.dp),
+                ambientColor = neonColor.copy(alpha = 0.8f),
+                spotColor = neonColor.copy(alpha = 0.8f)
+            )
             .fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp)
     ) {
-        Column(
-
-        ) {
-
+        Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
@@ -219,11 +262,13 @@ fun ChapterCard(
                 ) {
                     Text(
                         text = title,
-                        style = LearningZoneAppTheme.typography.titleLarge
+                        style = LearningZoneAppTheme.typography.titleLarge,
+                        color = LearningZoneAppTheme.colorScheme.onBackground
                     )
                     Text(
                         text = subtitle,
                         style = LearningZoneAppTheme.typography.labelLarge,
+                        color = LearningZoneAppTheme.colorScheme.onBackground,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -240,7 +285,8 @@ fun ChapterCard(
             Text(
                 modifier = Modifier.padding(16.dp),
                 text = "Ποσοστό ολοκλήρωσης: ${chapterProgress}%",
-                style = LearningZoneAppTheme.typography.bodyBold
+                style = LearningZoneAppTheme.typography.bodyBold,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 data class AppColorScheme(
     val background: Color,
     val onBackground: Color,
+    val surface: Color,
     val primary: Color,
     val onPrimary: Color,
     val secondary: Color,
@@ -17,21 +18,23 @@ data class AppColorScheme(
 )
 
 val darkColorScheme = AppColorScheme(
-    background = gray800_2,
-    onBackground = gray100_2,
-    primary = purple700,
-    onPrimary = purple900,
-    secondary = red700,
-    onSecondary = red900,
-    tertiary = yellow700,
-    onTertiary = yellow900,
-    quaternary = teal700,
-    onQuaternary = teal900
+    background = gray100Dark,
+    onBackground = white,
+    surface = gray800Dark,
+    primary = purple200Dark,
+    onPrimary = purple100Dark,
+    secondary = red200Dark,
+    onSecondary = red100Dark,
+    tertiary = yellow200Dark,
+    onTertiary = yellow100Dark,
+    quaternary = teal200Dark,
+    onQuaternary = teal100Dark
 )
 
 val lightColorScheme = AppColorScheme(
     background = gray100,
-    onBackground = gray800,
+    onBackground = black,
+    surface = gray100,
     primary = purple200,
     onPrimary = purple100,
     secondary = red200,
@@ -43,5 +46,5 @@ val lightColorScheme = AppColorScheme(
 )
 
 val localAppColorScheme = staticCompositionLocalOf {
-    lightColorScheme // Default to light color scheme
+    lightColorScheme
 }

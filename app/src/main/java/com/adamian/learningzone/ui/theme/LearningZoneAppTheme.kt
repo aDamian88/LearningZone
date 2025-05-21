@@ -3,6 +3,7 @@ package com.adamian.learningzone.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.shape
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.typography
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.size
@@ -45,4 +46,9 @@ object LearningZoneAppTheme {
 
     val size: AppSize
         @Composable get() = localAppSize.current
+
+    val neonColor: Color
+        @Composable
+        get() = if (isSystemInDarkTheme()) colorScheme.quaternary else Color.Transparent
+
 }
