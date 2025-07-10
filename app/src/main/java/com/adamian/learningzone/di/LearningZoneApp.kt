@@ -4,7 +4,9 @@ import android.app.Application
 import com.adamian.learningzone.R
 import com.adamian.learningzone.data.local.QuestionEntity
 import com.adamian.learningzone.domain.repository.QuestionRepository
+import com.adamian.learningzone.domain.usecase.CreateInitialQuizzesUC
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,12 +20,17 @@ class LearningZoneApp : Application() {
     @Inject
     lateinit var repository: QuestionRepository
 
+    @Inject lateinit var createInitialQuizzesUC: CreateInitialQuizzesUC
+
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
         GlobalScope.launch(Dispatchers.IO) {
             if (repository.isDatabaseEmpty()) {
                 val questions = parseQuestionsFromResources()
                 repository.insertAll(*questions.toTypedArray())
+                val savedQuestions = repository.getAllQuestions()
+                createInitialQuizzesUC.createQuizzes(savedQuestions)
             }
         }
     }

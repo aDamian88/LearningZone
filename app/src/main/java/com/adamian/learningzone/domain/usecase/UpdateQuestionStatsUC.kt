@@ -13,9 +13,4 @@ class UpdateQuestionStatsUC @Inject constructor(
     suspend fun incrementWrong(questionId: Int) {
         repository.incrementWrong(questionId)
     }
-
-    suspend fun incrementAnswered(questionId: Int) {
-        repository.incrementAnswered(questionId)
-    }
-
 }

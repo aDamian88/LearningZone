@@ -44,9 +44,4 @@ class QuestionRepositoryImp @Inject constructor(
     override suspend fun incrementWrong(questionId: Int) {
         appDao.incrementWrong(questionId)
     }
-
-    override suspend fun incrementAnswered(questionId: Int) {
-        appDao.incrementAnswered(questionId)  // Call DAO method to increment 'answered'
-    }
-
 }

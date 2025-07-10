@@ -58,8 +58,6 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 import kotlinx.coroutines.launch
 
 //// next steps
-//// - complete quiz screen
-//// - lets check the errors screen (after the re-quiz)
 //// - Animations
 //// ? exit bug
 
@@ -107,7 +105,7 @@ fun QuizScreen(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(16.dp) // Increased height
+                        .height(16.dp)
                         .padding(start = 8.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(LearningZoneAppTheme.colorScheme.background)
@@ -413,7 +411,6 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 32.dp)
-
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {

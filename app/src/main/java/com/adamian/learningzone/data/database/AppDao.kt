@@ -4,10 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.adamian.learningzone.data.local.QuestionEntity
+import com.adamian.learningzone.data.local.QuizEntity
+import com.adamian.learningzone.data.local.QuizQuestionCrossRef
 
 @Dao
 interface AppDao {
+
+    // questions
     @Insert
     suspend fun insertQuestion(questionEntity: QuestionEntity)
 
@@ -29,6 +34,15 @@ interface AppDao {
     @Query("UPDATE QuestionEntity SET wrong = wrong + 1, answered = answered + 1 WHERE id = :questionId")
     suspend fun incrementWrong(questionId: Int)
 
-    @Query("UPDATE QuestionEntity SET answered = answered + 1 WHERE id = :questionId")
-    suspend fun incrementAnswered(questionId: Int)
+    // quiz
+    @Insert
+    suspend fun insertQuiz(quiz: QuizEntity): Long
+
+    @Insert
+    suspend fun insertQuizQuestions(crossRefs: List<QuizQuestionCrossRef>)
+
+//    @Transaction
+//    @Query("SELECT * FROM quiz WHERE id = :quizId")
+//    suspend fun getQuizWithQuestions(quizId: Int): QuizWithQuestions
+
 }

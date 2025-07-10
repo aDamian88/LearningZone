@@ -11,5 +11,4 @@ interface QuestionRepository {
     suspend fun isDatabaseEmpty(): Boolean
     suspend fun incrementRight(questionId: Int)
     suspend fun incrementWrong(questionId: Int)
-    suspend fun incrementAnswered(questionId: Int)
 }
