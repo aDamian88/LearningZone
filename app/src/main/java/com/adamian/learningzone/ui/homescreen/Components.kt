@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
@@ -278,34 +277,11 @@ fun AverageFrame(
                 Spacer(modifier = Modifier.width(18.dp))
 
                 CircularProgressBar(
-                    percentage = 0.8f,
-                    number = 100
+                    percentage = completion.toFloat(),
+                    number = 100 // todo magic number
                 )
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 18.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Build,
-                    contentDescription = "Practice"
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-                Text(
-                    text = "Ασκήσεις",
-                    style = LearningZoneAppTheme.typography.titleNormal,
-                    color = LearningZoneAppTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-                CircularProgressBar(
-                    percentage = 0.8f,
-                    color = LearningZoneAppTheme.colorScheme.tertiary,
-                    number = 100
-                )
-            }
             Text(
                 modifier = Modifier.padding(top = 20.dp),
                 text = "Πρώτο πέρασμα της ύλης, αποκτάς βασικές γνώσεις για το μάθημα.",

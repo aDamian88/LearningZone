@@ -61,7 +61,6 @@ import kotlinx.coroutines.launch
 //// - Animations
 //// ? exit bug
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizScreen(
     chapterId: Int,

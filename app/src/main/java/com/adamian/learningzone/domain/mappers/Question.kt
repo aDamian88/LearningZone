@@ -33,6 +33,7 @@ internal fun QuestionEntity.toQuestionItem(): QuestionItem {
         level = level ?: 0,
         right = right ?: 0,
         wrong = wrong ?: 0,
-        answered = answered ?: 0
+        answered = answered ?: 0,
+        quizId = 0 // this is initialized by UseCase
     )
 }

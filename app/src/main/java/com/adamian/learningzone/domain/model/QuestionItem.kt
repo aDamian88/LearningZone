@@ -12,7 +12,8 @@ data class QuestionItem(
     val level: Int,
     val right: Int,
     val wrong: Int,
-    val answered: Int
+    val answered: Int,
+    val quizId: Int
 ) {
     private val rightAnswerWeight = 1.0
     private val wrongAnswerWeight = 0.5
@@ -28,6 +29,6 @@ data class QuestionItem(
 
     fun isAnswered(): Boolean {
         return answered != 0
-    }
+    } // todo re-check if its necessary
 }
 

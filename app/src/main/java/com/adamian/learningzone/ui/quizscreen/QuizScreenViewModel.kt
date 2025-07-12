@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.adamian.learningzone.domain.model.QuestionItem
 import com.adamian.learningzone.domain.usecase.GetQuestionsUC
 import com.adamian.learningzone.domain.usecase.UpdateQuestionStatsUC
+import com.adamian.learningzone.domain.usecase.UpdateQuizStatusUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizScreenViewModel @Inject constructor(
     private val getQuestionsUseCase: GetQuestionsUC,
-    private val updateQuestionStatsUC: UpdateQuestionStatsUC
+    private val updateQuestionStatsUC: UpdateQuestionStatsUC,
+    private val updateQuizStatusUC: UpdateQuizStatusUC
 ) : ViewModel() {
 
     // todo merge all flows to one uiState
@@ -113,6 +115,9 @@ class QuizScreenViewModel @Inject constructor(
             _selectedAnswer.value = null
         } else {
             _quizFinished.value = true
+            viewModelScope.launch {
+                updateQuizStatusUC.completeQuiz(_questions.value[0].quizId)
+            }
         }
         _showResult.value = false
     }

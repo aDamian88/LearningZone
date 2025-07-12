@@ -19,7 +19,19 @@ class QuizRepositoryImpl @Inject constructor(
         quizDao.insertQuizQuestions(refs)
     }
 
-//    override suspend fun getQuizWithQuestions(quizId: Int): QuizWithQuestions {
-//        return quizDao.getQuizWithQuestions(quizId)
-//    }
+    override suspend fun getAllQuiz(): List<QuizEntity> {
+        return quizDao.getAllQuiz()
+    }
+
+    override suspend fun getQuizzesByChapter(chapterId: Int): List<QuizEntity>{
+        return quizDao.getQuizzesByChapter(chapterId)
+
+    }
+    override suspend fun getAllQuizQuestionCrossRefs(): List<QuizQuestionCrossRef> {
+        return quizDao.getAllQuizQuestionCrossRefs()
+    }
+
+    override suspend fun completeQuiz(quizId: Int) {
+        quizDao.completeQuiz(quizId = quizId)
+    }
 }

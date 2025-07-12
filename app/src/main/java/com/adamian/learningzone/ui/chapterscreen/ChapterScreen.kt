@@ -8,16 +8,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -40,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.adamian.learningzone.R
+import com.adamian.learningzone.domain.usecase.GetChapterStatusFirstPassUC
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
@@ -51,13 +58,49 @@ fun ChapterScreen(
 ) {
 
     val chapterProgress by viewModel.chapterLearningProgress.collectAsState()
+    val appProgress by viewModel.appStats.collectAsState()
     var selectedChapterId by remember { mutableIntStateOf(0) }  // State to store selected chapter ID
 
     LaunchedEffect(Unit) {
         viewModel.loadChapterLearningProgress()
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(LearningZoneAppTheme.colorScheme.background),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close"
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(16.dp)
+                        .padding(start = 8.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(LearningZoneAppTheme.colorScheme.background)
+                ) {
+                    LinearProgressIndicator(
+                        progress = { appProgress?.completionPercentage?.toFloat() ?: 0.0f },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp)),
+                        color = LearningZoneAppTheme.colorScheme.quaternary,
+                        trackColor = Color.Transparent,
+                    )
+                }
+            }
+        }
+    ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -173,15 +216,16 @@ fun ChapterScreen(
 @Composable
 fun ChapterCardWithProgress(
     chapter: ChapterData,
-    chapterProgress: Map<Int, Int>,
+    chapterProgress: List<GetChapterStatusFirstPassUC.ChapterStats>,
     onClick: (Int) -> Unit
 ) {
+
     ChapterCard(
         id = chapter.id,
         iconResId = chapter.iconResId,
         title = chapter.title,
         subtitle = chapter.subtitle,
-        chapterProgress = chapterProgress[chapter.id]?.toString() ?: "0",
+        chapterProgress = chapterProgress,
         onClick = onClick
     )
 }
@@ -193,8 +237,8 @@ data class ChapterData(
     val subtitle: String
 )
 
-fun checkTheChapter(chapterId: Int, chapterProgress: Map<Int, Int>): Boolean {
-    return (chapterProgress[chapterId] ?: 0) >= 100
+fun checkTheChapter(chapterId: Int, chapterProgress: List<GetChapterStatusFirstPassUC.ChapterStats>): Boolean {
+    return (chapterProgress[chapterId].totalProgress.toInt() ?: 0) >= 100
 }
 
 @Composable
@@ -217,7 +261,7 @@ fun ChapterCard(
     iconResId: Int,
     title: String,
     subtitle: String,
-    chapterProgress: String,
+    chapterProgress: List<GetChapterStatusFirstPassUC.ChapterStats>,
     onClick: (Int) -> Unit
 ) {
     Card(
@@ -282,12 +326,89 @@ fun ChapterCard(
                         .size(35.dp)
                 )
             }
+
+            val progress = chapterProgress
+                .find { it.chapterId == id }
+                ?.totalProgress
+                ?: 0.0f
+
+            val totalQuestions = chapterProgress
+                .find { it.chapterId == id }
+                ?.totalQuestions
+                ?: 0
+
+            val answeredQuestions = chapterProgress
+                .find { it.chapterId == id }
+                ?.answeredQuestions
+                ?: 0
+
+            val totalQuizzes= chapterProgress
+                .find { it.chapterId == id }
+                ?.totalQuizzes
+                ?: 0
+
+            val completedQuizzes = chapterProgress
+                .find { it.chapterId == id }
+                ?.completedQuizzes
+                ?: 0
+
             Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Ποσοστό ολοκλήρωσης: ${chapterProgress}%",
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                text = "Συνολικά κουίζ: ${totalQuizzes}",
                 style = LearningZoneAppTheme.typography.bodyBold,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
+            Text(
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                text = "Ολοκληρωμένα κουίζ: ${completedQuizzes}",
+                style = LearningZoneAppTheme.typography.bodyBold,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
+
+            Text(
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                text = "Συνολικές ερωτήσεις: ${totalQuestions}",
+                style = LearningZoneAppTheme.typography.bodyBold,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
+            Text(
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                text = "απαντημένες ερωτήσεις: ${answeredQuestions}",
+                style = LearningZoneAppTheme.typography.bodyBold,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
+            Text(
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                text = "Ποσοστό ολοκλήρωσης: ${(progress * 100).toInt()}%",
+                style = LearningZoneAppTheme.typography.bodyBold,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(LearningZoneAppTheme.colorScheme.background),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(8.dp)
+                        .padding(start = 8.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(LearningZoneAppTheme.colorScheme.background)
+                ) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp)),
+                        color = LearningZoneAppTheme.colorScheme.quaternary,
+                        trackColor = Color.Transparent,
+                    )
+                }
+            }
         }
     }
 }

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import com.adamian.learningzone.data.local.QuestionEntity
 import com.adamian.learningzone.data.local.QuizEntity
 import com.adamian.learningzone.data.local.QuizQuestionCrossRef
@@ -41,8 +40,17 @@ interface AppDao {
     @Insert
     suspend fun insertQuizQuestions(crossRefs: List<QuizQuestionCrossRef>)
 
-//    @Transaction
-//    @Query("SELECT * FROM quiz WHERE id = :quizId")
-//    suspend fun getQuizWithQuestions(quizId: Int): QuizWithQuestions
+    @Query("SELECT * FROM quiz")
+    suspend fun getAllQuiz(): List<QuizEntity>
+
+    @Query("SELECT * FROM quiz WHERE chapterId = :chapterId")
+    suspend fun getQuizzesByChapter(chapterId: Int): List<QuizEntity>
+
+    @Query("SELECT * FROM QuizQuestionCrossRef")
+    suspend fun getAllQuizQuestionCrossRefs(): List<QuizQuestionCrossRef>
+
+
+    @Query("UPDATE quiz SET completed = completed + 1 WHERE id = :quizId")
+    suspend fun completeQuiz(quizId: Int)
 
 }
