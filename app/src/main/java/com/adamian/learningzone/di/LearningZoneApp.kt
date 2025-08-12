@@ -55,9 +55,9 @@ class LearningZoneApp : Application() {
                     correctOption = jsonObject.optString("correctOption"),
                     chapter = jsonObject.optInt("chapter"),
                     level = jsonObject.optInt("level"),
-                    right = jsonObject.optInt("right"),
-                    wrong = jsonObject.optInt("wrong"),
-                    answered = jsonObject.optInt("answered")
+                    right = jsonObject.optInt("right",0),
+                    wrong = jsonObject.optInt("wrong",0),
+                    answered = jsonObject.optInt("answered",0)
                 )
                 questions.add(question)
             }

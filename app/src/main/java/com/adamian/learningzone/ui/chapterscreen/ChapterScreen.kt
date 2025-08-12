@@ -238,7 +238,11 @@ data class ChapterData(
 )
 
 fun checkTheChapter(chapterId: Int, chapterProgress: List<GetChapterStatusFirstPassUC.ChapterStats>): Boolean {
-    return (chapterProgress[chapterId].totalProgress.toInt() ?: 0) >= 100
+    val progress = chapterProgress
+        .find { it.chapterId == chapterId }
+        ?.totalProgress
+        ?: 0.0f
+    return progress >= 100
 }
 
 @Composable
