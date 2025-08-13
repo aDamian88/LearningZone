@@ -1,6 +1,7 @@
 package com.adamian.learningzone.ui.quizscreen
 
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,10 +59,6 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 import kotlinx.coroutines.launch
 
-//// next steps
-//// - Animations
-//// ? exit bug
-
 @Composable
 fun QuizScreen(
     chapterId: Int,
@@ -84,6 +82,8 @@ fun QuizScreen(
     val wrongList = viewModel.wrongQuestions
 
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
+
+    BackHandler {}
 
     Scaffold(
         topBar = {
@@ -134,12 +134,12 @@ fun QuizScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(bottom = 90.dp)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = question.title,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
                             .padding(16.dp),
                         style = LearningZoneAppTheme.typography.titleLarge,
                         color = LearningZoneAppTheme.colorScheme.onBackground
@@ -230,10 +230,13 @@ fun AnswerBottomSheet(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = null
     ) {
+        BackHandler {}
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 32.dp)
+                .padding(horizontal = 24.dp, vertical = 48.dp)
+                .navigationBarsPadding()
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
@@ -493,7 +496,7 @@ fun AnswerCard(
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
-                LearningZoneAppTheme.colorScheme.onPrimary
+                LearningZoneAppTheme.colorScheme.tertiary
             else
                 LearningZoneAppTheme.colorScheme.surface
         ),

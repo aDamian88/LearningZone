@@ -8,12 +8,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.adamian.learningzone.R
 
-val Handlee = FontFamily(
-    Font(R.font.handleeregular, FontWeight.Normal)
-)
-
-val Inter = FontFamily(
-    Font(R.font.intermedium, FontWeight.Normal)
+val NotoSans = FontFamily(
+    Font(R.font.notosansregular, FontWeight.Normal)
 )
 
 data class AppTypography(
@@ -29,37 +25,37 @@ data class AppTypography(
 val localAppTypography = staticCompositionLocalOf {
     AppTypography(
         titleLarge = TextStyle(
-            fontFamily = Handlee,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp
         ),
         titleNormal = TextStyle(
-            fontFamily = Handlee,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp
         ),
         body = TextStyle(
-            fontFamily = Inter,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
         ),
         bodyBold = TextStyle(
-            fontFamily = Inter,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         ),
         labelLarge = TextStyle(
-            fontFamily = Inter,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp
         ),
         labelNormal = TextStyle(
-            fontFamily = Inter,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp
         ),
         labelSmall = TextStyle(
-            fontFamily = Inter,
+            fontFamily = NotoSans,
             fontWeight = FontWeight.Normal,
             fontSize = 10.sp
         )

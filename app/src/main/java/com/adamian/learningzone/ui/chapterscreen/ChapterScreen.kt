@@ -74,7 +74,7 @@ fun ChapterScreen(
                     .background(LearningZoneAppTheme.colorScheme.background),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close"
@@ -109,7 +109,6 @@ fun ChapterScreen(
         ) {
             var showDialog by remember { mutableStateOf(false) }
 
-            // Background
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
@@ -119,18 +118,6 @@ fun ChapterScreen(
                         .align(Alignment.TopCenter)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.home_icon),
-                        tint = Color.Unspecified,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .size(70.dp)
-                            .clickable { navController.popBackStack() },
-                    )
-
-                    Spacer(modifier = Modifier.padding(20.dp))
-
                     val chapters = listOf(
                         ChapterData(
                             1,
