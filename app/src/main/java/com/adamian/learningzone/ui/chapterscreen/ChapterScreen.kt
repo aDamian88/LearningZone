@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -163,65 +164,27 @@ fun ChapterListContent(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        Column( // todo make it LazyColumn
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .verticalScroll(rememberScrollState())
+        LazyColumn(
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentPadding = PaddingValues(vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val chapters = listOf(
-                ChapterData(
-                    1,
-                    R.drawable.problem_analysis,
-                    "Κεφάλαιο 1",
-                    "Ανάλυση Προβλήματος"
-                ),
-                ChapterData(
-                    2,
-                    R.drawable.basic_algorithm_concept,
-                    "Κεφάλαιο 2",
-                    "Βασικές Έννοιες Αλγορίθμων"
-                ),
-                ChapterData(
-                    3,
-                    R.drawable.data_stractures_algorithms,
-                    "Κεφάλαιο 3",
-                    "Δομές Δεδομένων και Αλγόριθμοι"
-                ),
-                ChapterData(
-                    4,
-                    R.drawable.algorithm_design_techniques,
-                    "Κεφάλαιο 4",
-                    "Τεχνικές Σχεδίασης Αλγόριθμων"
-                ),
-                ChapterData(
-                    6,
-                    R.drawable.introduction_programming,
-                    "Κεφάλαιο 6",
-                    "Εισαγωγή στον Προγραμματισμό"
-                ),
-                ChapterData(
-                    7,
-                    R.drawable.basic_programming_concepts,
-                    "Κεφάλαιο 7",
-                    "Βασικές Έννοιες Προγραμματισμού"
-                ),
-                ChapterData(
-                    8,
-                    R.drawable.select_n_repeat,
-                    "Κεφάλαιο 8",
-                    "Επιλογή και Επανάληψη"
-                ),
+                ChapterData(1, R.drawable.problem_analysis, "Κεφάλαιο 1", "Ανάλυση Προβλήματος"),
+                ChapterData(2, R.drawable.basic_algorithm_concept, "Κεφάλαιο 2", "Βασικές Έννοιες Αλγορίθμων"),
+                ChapterData(3, R.drawable.data_stractures_algorithms, "Κεφάλαιο 3", "Δομές Δεδομένων και Αλγόριθμοι"),
+                ChapterData(4, R.drawable.algorithm_design_techniques, "Κεφάλαιο 4", "Τεχνικές Σχεδίασης Αλγόριθμων"),
+                ChapterData(6, R.drawable.introduction_programming, "Κεφάλαιο 6", "Εισαγωγή στον Προγραμματισμό"),
+                ChapterData(7, R.drawable.basic_programming_concepts, "Κεφάλαιο 7", "Βασικές Έννοιες Προγραμματισμού"),
+                ChapterData(8, R.drawable.select_n_repeat, "Κεφάλαιο 8", "Επιλογή και Επανάληψη"),
                 ChapterData(9, R.drawable.matrix, "Κεφάλαιο 9", "Πίνακες"),
                 ChapterData(10, R.drawable.subprograms, "Κεφάλαιο 10", "Υποπρογράμματα"),
-                ChapterData(
-                    13,
-                    R.drawable.debbuging,
-                    "Κεφάλαιο 13",
-                    "Εκσφαλμάτωση Προγράμματος"
-                )
+                ChapterData(13, R.drawable.debbuging, "Κεφάλαιο 13", "Εκσφαλμάτωση Προγράμματος")
             )
-
-            chapters.forEach { chapter ->
+            items(
+                items = chapters,
+                key = { it.id }
+            ) { chapter ->
                 ChapterCardWithProgress(
                     chapter = chapter,
                     chapterProgress = chapterProgress,
@@ -230,7 +193,6 @@ fun ChapterListContent(
                             chapterId = chapterId,
                             chapterProgress = chapterProgress
                         )
-
                         if (isChapterCompleted) {
                             selectedChapterId = chapterId
                             showDialog = true
@@ -242,12 +204,13 @@ fun ChapterListContent(
             }
 
             if (showDialog) {
-                InfoDialog(onDismiss = { showDialog = false })  // Handle dialog visibility
+                item {
+                    InfoDialog(onDismiss = { showDialog = false })
+                }
             }
         }
     }
 }
-
 
 @Composable
 fun ChapterCardWithProgress(
@@ -376,13 +339,8 @@ fun ChapterCard(
             val totalQuestions = chapterProgress.find { it.chapterId == id }?.totalQuestions ?: 0
             val answeredQuestions =
                 chapterProgress.find { it.chapterId == id }?.answeredQuestions ?: 0
-            val totalQuizzes = chapterProgress.find { it.chapterId == id }?.totalQuizzes ?: 0
-            val completedQuizzes =
-                chapterProgress.find { it.chapterId == id }?.completedQuizzes ?: 0
 
             StatsChipsRow(
-                totalQuizzes = totalQuizzes,
-                completedQuizzes = completedQuizzes,
                 totalQuestions = totalQuestions,
                 answeredQuestions = answeredQuestions
             )
@@ -444,22 +402,13 @@ fun ChapterProgressRow(progress: Float) {
     }
 }
 
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StatsChipsRow(
-    totalQuizzes: Int,
-    completedQuizzes: Int,
     totalQuestions: Int,
     answeredQuestions: Int
 ) {
     val chipData = listOf(
-//        Triple("Συνολικά κουίζ", totalQuizzes.toString(), LearningZoneAppTheme.colorScheme.primary),
-//        Triple(
-//            "Ολοκληρωμένα κουίζ",
-//            completedQuizzes.toString(),
-//            LearningZoneAppTheme.colorScheme.tertiary
-//        ),
         Triple("Ερωτήσεις", totalQuestions.toString(), LearningZoneAppTheme.colorScheme.secondary),
         Triple(
             "Απαντησεις",

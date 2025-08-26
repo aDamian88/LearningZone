@@ -7,17 +7,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -45,9 +45,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -139,42 +139,41 @@ fun QuizScreen(
         ) {
             currentQuestion?.let { question ->
 
-                Column( // todo LazyColumn
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 90.dp)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(bottom = 90.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = question.title,
-                        modifier = Modifier
-                            .padding(8.dp),
-                        style = LearningZoneAppTheme.typography.labelLarge,
-                        color = LearningZoneAppTheme.colorScheme.onBackground
-                    )
+                    item {
+                        Text(
+                            text = question.title,
+                            modifier = Modifier.padding(8.dp),
+                            style = LearningZoneAppTheme.typography.labelLarge,
+                            color = LearningZoneAppTheme.colorScheme.onBackground
+                        )
+                    }
 
-                    QuestionBox(question = question.question)
+                    item {
+                        QuestionBox(question = question.question)
+                    }
 
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    question.options.filterNotNull().filter { it.isNotBlank() }
-                        .forEach { option ->
-                            AnswerCard(
-                                answer = option,
-                                isSelected = selectedAnswer == option,
-                                onClick = {
-                                    viewModel.selectAnswer(option)
-                                }
-                            )
-                        }
+                    items(question.options.filterNotNull().filter { it.isNotBlank() }) { option ->
+                        AnswerCard(
+                            answer = option,
+                            isSelected = selectedAnswer == option,
+                            onClick = { viewModel.selectAnswer(option) }
+                        )
+                    }
                 }
 
                 SubmitAnswerButton(
                     enabled = selectedAnswer != null,
                     onClick = {
-                        selectedAnswer?.let {
-                            viewModel.submitAnswer(answer = selectedAnswer!!) // Todo this validation should change
+                        selectedAnswer?.let { answer ->
+                            viewModel.submitAnswer(answer = answer)
                         }
                     },
                     modifier = Modifier
@@ -235,7 +234,7 @@ fun AnswerBottomSheet(
         onDismissRequest = {},
         sheetState = sheetState,
         scrimColor = Color.Transparent,
-        containerColor = if (isCorrect) Color(0xFFDFF0D8) else Color(0xFFF2DEDE),
+        containerColor = if (isCorrect) Color(0xFFDFF0D8) else Color(0xFFF2DEDE), // todo put these or similar colors to palette + for dark mode
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = null
     ) {
@@ -574,7 +573,7 @@ fun AnswerCard(
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
-                LearningZoneAppTheme.colorScheme.tertiary
+                LearningZoneAppTheme.colorScheme.topSurface
             else
                 LearningZoneAppTheme.colorScheme.surface
         ),
@@ -613,8 +612,10 @@ fun SubmitAnswerButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (enabled)
-        Color(0xFF4CAF50) else Color(0xFFBDBDBD) // todo change the colors??
+    val backgroundColor =
+        if (enabled)
+            Color(LearningZoneAppTheme.colorScheme.quaternary.toArgb())
+        else Color(LearningZoneAppTheme.colorScheme.surface.toArgb())
 
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),

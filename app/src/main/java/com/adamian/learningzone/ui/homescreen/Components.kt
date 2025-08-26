@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,9 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -54,7 +50,6 @@ import com.adamian.learningzone.domain.model.AppStats
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 import com.airbnb.lottie.LottieProperty
-import com.airbnb.lottie.SimpleColorFilter
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -62,7 +57,6 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
-import com.airbnb.lottie.value.LottieValueCallback
 
 @Composable
 fun CircularProgressBar(
@@ -226,77 +220,6 @@ fun SquareCard(
             Text(
                 text = bottomText,
                 style = LearningZoneAppTheme.typography.titleLarge,
-                color = LearningZoneAppTheme.colorScheme.onBackground
-            )
-        }
-    }
-}
-
-@Composable
-fun AverageFrame(
-    modifier: Modifier = Modifier.background(
-        color = LearningZoneAppTheme.colorScheme.surface,
-    ),
-    completion: Double
-) {
-    Box(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .background(
-                color = LearningZoneAppTheme.colorScheme.surface,
-            )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Level"
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-                Text(
-                    text = "Επίπεδο 1",
-                    style = LearningZoneAppTheme.typography.titleLarge,
-                    color = LearningZoneAppTheme.colorScheme.onBackground,
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 18.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = "Theory"
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-                Text(
-                    text = "Θεωρία",
-                    style = LearningZoneAppTheme.typography.titleNormal,
-                    color = LearningZoneAppTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-
-                CircularProgressBar(
-                    percentage = completion.toFloat(),
-                    number = 100 // todo magic number
-                )
-            }
-
-            Text(
-                modifier = Modifier.padding(top = 20.dp),
-                text = "Πρώτο πέρασμα της ύλης, αποκτάς βασικές γνώσεις για το μάθημα.",
-                style = LearningZoneAppTheme.typography.labelLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
         }
@@ -659,4 +582,3 @@ fun CustomLottie(modifier: Modifier, resId: Int) {
         dynamicProperties = dynamicProperties
     )
 }
-

@@ -1,4 +1,5 @@
 package com.adamian.learningzone.ui.theme.color
+
 import androidx.compose.ui.graphics.Color
 
 
@@ -12,7 +13,8 @@ val yellow100 = Color(0xFFFFFFFF)
 val teal200 = Color(0xFF61C6C3)
 val teal100 = Color(0xFFFFFFFF)
 val gray100 = Color(0XFFEAEEFA)
-val gray800 = Color(0XFF414042)
+val gray200 = Color(0xFFD0D4E5)
+val gray300 = Color(0xFFB6BAD1)
 
 // Dark Theme Colors
 val purple200Dark = Color(0xFFD1A5F3)
@@ -29,6 +31,7 @@ val teal100Dark = Color(0xFF004D4D)
 
 val gray100Dark = Color(0xFF121212)
 val gray800Dark = Color(0xFF1E1E1E)
+val gray600Dark = Color(0xFF4D4D4D)
 
 
 // Generic
