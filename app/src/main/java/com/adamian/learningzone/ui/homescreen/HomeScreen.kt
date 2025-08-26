@@ -60,7 +60,7 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .weight(1f)
+                        .weight(0.5f)
                         .fillMaxWidth()
                 ) {
                     Text(
@@ -75,14 +75,17 @@ fun HomeScreen(
                     )
                 }
 
-                appStats?.let {
-                    AverageFrame(
-                        modifier = Modifier
-                            .weight(2f)
-                            .fillMaxWidth(),
-                        completion = it.completionPercentage
-                    )
-                }
+                GuyLottie(modifier = Modifier.weight(2f).fillMaxWidth())
+
+                Text(
+                    modifier = Modifier
+                    .padding(16.dp)
+                    .weight(0.5f)
+                    .fillMaxWidth(),
+                    text = "\"Μαθε τα βασικά! Εισαγωγή στις θεμελιώδες έννοιες του ΑΕΠΠ.\"",
+                    style = LearningZoneAppTheme.typography.bodyItalicBold,
+                    color = LearningZoneAppTheme.colorScheme.onBackground
+                )
 
                 HomeCard(
                     modifier = Modifier

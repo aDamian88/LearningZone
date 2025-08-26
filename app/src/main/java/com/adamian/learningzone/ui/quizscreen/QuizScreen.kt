@@ -14,14 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,14 +45,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.adamian.learningzone.R
 import com.adamian.learningzone.domain.model.QuestionItem
+import com.adamian.learningzone.ui.homescreen.CustomLottie
+import com.adamian.learningzone.ui.homescreen.QuestionLottie
+import com.adamian.learningzone.ui.homescreen.RightLottie
+import com.adamian.learningzone.ui.homescreen.WarningLottie
+import com.adamian.learningzone.ui.homescreen.WrongLottie
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
@@ -97,6 +105,7 @@ fun QuizScreen(
                 IconButton(onClick = { viewModel.exitQuizSheet() }) {
                     Icon(
                         imageVector = Icons.Default.Close,
+                        tint = LearningZoneAppTheme.colorScheme.onBackground,
                         contentDescription = "Close"
                     )
                 }
@@ -130,7 +139,7 @@ fun QuizScreen(
         ) {
             currentQuestion?.let { question ->
 
-                Column(
+                Column( // todo LazyColumn
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(bottom = 90.dp)
@@ -140,8 +149,8 @@ fun QuizScreen(
                     Text(
                         text = question.title,
                         modifier = Modifier
-                            .padding(16.dp),
-                        style = LearningZoneAppTheme.typography.titleLarge,
+                            .padding(8.dp),
+                        style = LearningZoneAppTheme.typography.labelLarge,
                         color = LearningZoneAppTheme.colorScheme.onBackground
                     )
 
@@ -247,30 +256,34 @@ fun AnswerBottomSheet(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        id = if (isCorrect) R.drawable.coffeedoodle else R.drawable.pendoodle
+                    ),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+
+                Text(
+                    text = if (isCorrect) "Σωστά" else "Θέλει διόρθωση",
+                    style = LearningZoneAppTheme.typography.titleNormal,
+                    modifier = Modifier.weight(1f)
+                )
+
                 if (isCorrect) {
-                    Icon(
-                        imageVector = Icons.Default.ThumbUp,
-                        modifier = Modifier.weight(0.1f),
-                        contentDescription = "correct"
-                    )
-                    Text(
-                        text = "Σωστά",
-                        style = LearningZoneAppTheme.typography.titleNormal,
-                        modifier = Modifier.weight(0.9f),
+                    RightLottie(
+                        modifier = Modifier.size(48.dp)
                     )
                 } else {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        modifier = Modifier.weight(0.1f),
-                        contentDescription = "wrong"
-                    )
-                    Text(
-                        text = "Θέλει διόρθωση",
-                        style = LearningZoneAppTheme.typography.titleNormal,
-                        modifier = Modifier.weight(0.9f),
+                    WrongLottie(
+                        modifier = Modifier.size(48.dp)
                     )
                 }
             }
@@ -331,14 +344,13 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
             }
         },
         sheetState = sheetState,
-        containerColor = Color.White,
+        containerColor = LearningZoneAppTheme.colorScheme.background,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 32.dp)
-                .background(LearningZoneAppTheme.colorScheme.background)
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
@@ -348,22 +360,35 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
                 },
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
             Icon(
-                imageVector = Icons.Default.Info,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 4.dp),
-                contentDescription = "Close"
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+                    .size(40.dp),
+                imageVector = ImageVector.vectorResource(
+                    id = R.drawable.backbagdoodle
+                ),
+                tint = Color.Unspecified,
+                contentDescription = null
             )
+
             Text(
-                text = "Θέλεις να φύγεις από το μάθημα;",
+                text = "Θέλεις να φύγεις από το κουίζ;",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
                     .padding(horizontal = 24.dp, vertical = 4.dp),
-                style = LearningZoneAppTheme.typography.titleNormal,
+                textAlign = TextAlign.Center,
+                style = LearningZoneAppTheme.typography.labelLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
+
+            QuestionLottie(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+                    .size(40.dp)
+            )
+
             Button(
                 onClick = {
                     scope.launch {
@@ -375,7 +400,10 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 4.dp)
             ) {
-                Text("Συνέχεια μαθήματος")
+                Text(
+                    text = "Συνέχεια μαθήματος",
+                    style = LearningZoneAppTheme.typography.bodyBold,
+                )
             }
 
             Button(
@@ -387,7 +415,10 @@ fun ExitBottomSheet(navController: NavController, viewModel: QuizScreenViewModel
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 4.dp)
             ) {
-                Text("Έξόδος")
+                Text(
+                    text = "Έξόδος",
+                    style = LearningZoneAppTheme.typography.bodyBold,
+                )
             }
         }
     }
@@ -422,22 +453,35 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
                 },
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
             Icon(
-                imageVector = Icons.Default.Info,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 4.dp),
-                contentDescription = "Close"
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+                    .size(40.dp),
+                imageVector = ImageVector.vectorResource(
+                    id = R.drawable.glassesdoodle
+                ),
+                tint = Color.Unspecified,
+                contentDescription = null
             )
+
             Text(
                 text = "Έκανες κάποια λάθη, πάμε να τα δούμε...",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
                     .padding(horizontal = 24.dp, vertical = 4.dp),
-                style = LearningZoneAppTheme.typography.titleNormal,
+                textAlign = TextAlign.Center,
+                style = LearningZoneAppTheme.typography.labelLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
+
+            WarningLottie(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+                    .size(40.dp)
+            )
+
             Button(
                 onClick = {
                     scope.launch {
@@ -457,10 +501,15 @@ fun CorrectionBottomSheet(viewModel: QuizScreenViewModel) {
 
 @Composable
 fun QuestionBox(question: String) {
+
+    val leftIcon = remember(question) { randomDoodleIcon() }
+    val rightIcon = remember(question) { randomDoodleIcon(exclude = leftIcon) }
+    val lottie = remember(question) { randomLottie() }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 48.dp)
+            .padding(horizontal = 16.dp, vertical = 24.dp)
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(10.dp),
@@ -473,16 +522,45 @@ fun QuestionBox(question: String) {
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
 
-            Spacer(modifier = Modifier.padding(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = leftIcon),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = rightIcon),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(16.dp),
+                    .padding(start = 16.dp, end = 16.dp),
                 text = question,
                 style = LearningZoneAppTheme.typography.titleNormal,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
-            Spacer(modifier = Modifier.padding(10.dp))
+
+            key(lottie) {
+                CustomLottie(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(84.dp),
+                    resId = lottie
+                )
+            }
         }
     }
 }
@@ -536,7 +614,7 @@ fun SubmitAnswerButton(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = if (enabled)
-        Color(0xFF4CAF50) else Color(0xFFBDBDBD)
+        Color(0xFF4CAF50) else Color(0xFFBDBDBD) // todo change the colors??
 
     Card(
         colors = CardDefaults.cardColors(containerColor = backgroundColor),

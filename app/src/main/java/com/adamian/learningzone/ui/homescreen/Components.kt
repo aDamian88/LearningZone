@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -52,6 +53,16 @@ import com.adamian.learningzone.R
 import com.adamian.learningzone.domain.model.AppStats
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.lottie.compose.rememberLottieDynamicProperties
+import com.airbnb.lottie.compose.rememberLottieDynamicProperty
+import com.airbnb.lottie.value.LottieValueCallback
 
 @Composable
 fun CircularProgressBar(
@@ -141,7 +152,7 @@ fun HomeCard(
                 .fillMaxSize()
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.search_icon),
+                imageVector = ImageVector.vectorResource(id = R.drawable.rocketdoodle),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier.size(70.dp)
@@ -149,12 +160,12 @@ fun HomeCard(
             Spacer(modifier = Modifier.width(18.dp))
             Column {
                 Text(
-                    text = "Ημερήσιο Κουίζ",
+                    text = "Κεφάλαια",
                     style = LearningZoneAppTheme.typography.titleLarge,
                     color = LearningZoneAppTheme.colorScheme.onBackground,
                 )
                 Text(
-                    text = "20 ερωτήσεις",
+                    text = "1ο πέρασμα ύλης",
                     style = LearningZoneAppTheme.typography.labelLarge,
                     color = LearningZoneAppTheme.colorScheme.onBackground
                 )
@@ -199,7 +210,7 @@ fun SquareCard(
             verticalArrangement = Arrangement.spacedBy(
                 8.dp,
                 Alignment.CenterVertically
-            ), // Spaces out children
+            ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -315,7 +326,7 @@ fun SubscriptionCard(onCardClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.subscription_icon),
+                imageVector = ImageVector.vectorResource(id = R.drawable.laptopdoodle),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
@@ -355,7 +366,7 @@ fun StatsCard(onCardClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.stats_icon),
+                imageVector = ImageVector.vectorResource(id = R.drawable.bookdoodle),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
@@ -549,5 +560,103 @@ fun StatsBottomSheet(
             }
         }
     }
+}
+
+@Composable
+fun GuyLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.learning))
+    val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        progress = { progress }
+    )
+}
+
+@Composable
+fun RightLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.right))
+    val progress by animateLottieCompositionAsState(composition)
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        progress = { progress }
+    )
+}
+
+@Composable
+fun WrongLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wrong))
+    val progress by animateLottieCompositionAsState(composition)
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        progress = { progress }
+    )
+}
+
+@Composable
+fun WarningLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.warning))
+    val progress by animateLottieCompositionAsState(composition)
+
+    val dynamicProperties = rememberLottieDynamicProperties(
+        rememberLottieDynamicProperty(
+            property = LottieProperty.STROKE_COLOR,
+            value = LearningZoneAppTheme.colorScheme.onBackground.toArgb(),
+            keyPath = arrayOf("**")
+        )
+    )
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        progress = { progress },
+        dynamicProperties = dynamicProperties
+    )
+}
+
+@Composable
+fun QuestionLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.question))
+    val progress by animateLottieCompositionAsState(composition)
+
+    val dynamicProperties = rememberLottieDynamicProperties(
+        rememberLottieDynamicProperty(
+            property = LottieProperty.STROKE_COLOR,
+            value = LearningZoneAppTheme.colorScheme.onBackground.toArgb(),
+            keyPath = arrayOf("**")
+        )
+    )
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = modifier,
+        dynamicProperties = dynamicProperties
+    )
+}
+
+@Composable
+fun CustomLottie(modifier: Modifier, resId: Int) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId = resId))
+    val progress by animateLottieCompositionAsState(composition)
+
+    val dynamicProperties = rememberLottieDynamicProperties(
+        rememberLottieDynamicProperty(
+            property = LottieProperty.STROKE_COLOR,
+            value = LearningZoneAppTheme.colorScheme.onBackground.toArgb(),
+            keyPath = arrayOf("**")
+        )
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = modifier,
+        dynamicProperties = dynamicProperties
+    )
 }
 

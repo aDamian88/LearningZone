@@ -4,6 +4,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.adamian.learningzone.R
@@ -17,6 +18,7 @@ data class AppTypography(
     val titleNormal: TextStyle,
     val body: TextStyle,
     val bodyBold: TextStyle,
+    val bodyItalicBold: TextStyle,
     val labelLarge: TextStyle,
     val labelNormal: TextStyle,
     val labelSmall: TextStyle
@@ -42,6 +44,12 @@ val localAppTypography = staticCompositionLocalOf {
         bodyBold = TextStyle(
             fontFamily = NotoSans,
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        ),
+        bodyItalicBold = TextStyle(
+            fontFamily = NotoSans,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Italic,
             fontSize = 16.sp
         ),
         labelLarge = TextStyle(
