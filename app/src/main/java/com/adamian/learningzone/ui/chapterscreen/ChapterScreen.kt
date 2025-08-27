@@ -171,11 +171,36 @@ fun ChapterListContent(
         ) {
             val chapters = listOf(
                 ChapterData(1, R.drawable.problem_analysis, "Κεφάλαιο 1", "Ανάλυση Προβλήματος"),
-                ChapterData(2, R.drawable.basic_algorithm_concept, "Κεφάλαιο 2", "Βασικές Έννοιες Αλγορίθμων"),
-                ChapterData(3, R.drawable.data_stractures_algorithms, "Κεφάλαιο 3", "Δομές Δεδομένων και Αλγόριθμοι"),
-                ChapterData(4, R.drawable.algorithm_design_techniques, "Κεφάλαιο 4", "Τεχνικές Σχεδίασης Αλγόριθμων"),
-                ChapterData(6, R.drawable.introduction_programming, "Κεφάλαιο 6", "Εισαγωγή στον Προγραμματισμό"),
-                ChapterData(7, R.drawable.basic_programming_concepts, "Κεφάλαιο 7", "Βασικές Έννοιες Προγραμματισμού"),
+                ChapterData(
+                    2,
+                    R.drawable.basic_algorithm_concept,
+                    "Κεφάλαιο 2",
+                    "Βασικές Έννοιες Αλγορίθμων"
+                ),
+                ChapterData(
+                    3,
+                    R.drawable.data_stractures_algorithms,
+                    "Κεφάλαιο 3",
+                    "Δομές Δεδομένων και Αλγόριθμοι"
+                ),
+                ChapterData(
+                    4,
+                    R.drawable.algorithm_design_techniques,
+                    "Κεφάλαιο 4",
+                    "Τεχνικές Σχεδίασης Αλγόριθμων"
+                ),
+                ChapterData(
+                    6,
+                    R.drawable.introduction_programming,
+                    "Κεφάλαιο 6",
+                    "Εισαγωγή στον Προγραμματισμό"
+                ),
+                ChapterData(
+                    7,
+                    R.drawable.basic_programming_concepts,
+                    "Κεφάλαιο 7",
+                    "Βασικές Έννοιες Προγραμματισμού"
+                ),
                 ChapterData(8, R.drawable.select_n_repeat, "Κεφάλαιο 8", "Επιλογή και Επανάληψη"),
                 ChapterData(9, R.drawable.matrix, "Κεφάλαιο 9", "Πίνακες"),
                 ChapterData(10, R.drawable.subprograms, "Κεφάλαιο 10", "Υποπρογράμματα"),
@@ -202,13 +227,12 @@ fun ChapterListContent(
                     }
                 )
             }
-
-            if (showDialog) {
-                item {
-                    InfoDialog(onDismiss = { showDialog = false })
-                }
-            }
         }
+
+        if (showDialog) {
+            InfoDialog(onDismiss = { showDialog = false })
+        }
+
     }
 }
 
@@ -244,18 +268,43 @@ fun checkTheChapter(
         .find { it.chapterId == chapterId }
         ?.totalProgress
         ?: 0.0f
-    return progress >= 100
+    return progress >= 1
 }
 
 @Composable
 fun InfoDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Ολοκληρωμένο κεφάλαιο") },
-        text = { Text(text = "Μπορείς να συνεχίσεις σε άλλο κεφάλαιο.") },
+        containerColor = LearningZoneAppTheme.colorScheme.surface,
+        icon = {
+            Icon(
+                imageVector = ImageVector.vectorResource(
+                    id = R.drawable.coffeedoodle
+                ),
+                tint = Color.Unspecified,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+        },
+        title = {
+            Text(
+                text = "Ολοκληρωμένο κεφάλαιο!",
+                style = LearningZoneAppTheme.typography.labelLarge,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
+        },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Kλείσιμο")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                TextButton(onClick = onDismiss) {
+                    Text(
+                        text = "Kλείσιμο",
+                        style = LearningZoneAppTheme.typography.labelLarge,
+                        color = LearningZoneAppTheme.colorScheme.primary
+                    )
+                }
             }
         }
     )
