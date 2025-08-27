@@ -51,7 +51,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -290,14 +289,14 @@ fun AnswerBottomSheet(
             if (!isCorrect) {
                 Text(
                     text = "Η σωστή απάντηση είναι: ${question.correctOption}",
-                    fontSize = 16.sp
+                    style = LearningZoneAppTheme.typography.bodyBold,
                 )
             }
 
             if (revealText) {
                 Text(
                     text = "Απάντηση: ${question.answerDescription}",
-                    fontSize = 16.sp
+                    style = LearningZoneAppTheme.typography.body,
                 )
             }
 
@@ -313,7 +312,10 @@ fun AnswerBottomSheet(
                     enabled = !whyButtonClicked,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = "Γιατί;")
+                    Text(
+                        text = "Γιατί;",
+                        style = LearningZoneAppTheme.typography.bodyBold,
+                    )
                 }
 
                 Button(
@@ -322,7 +324,10 @@ fun AnswerBottomSheet(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Κατάλαβα")
+                    Text(
+                        text = "Κατάλαβα",
+                        style = LearningZoneAppTheme.typography.bodyBold,
+                    )
                 }
             }
         }

@@ -165,7 +165,9 @@ fun ChapterListContent(
         contentAlignment = Alignment.Center,
     ) {
         LazyColumn(
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .background(LearningZoneAppTheme.colorScheme.topSurface),
             contentPadding = PaddingValues(vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
