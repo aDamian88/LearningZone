@@ -75,7 +75,7 @@ fun HomeScreen(
                     )
                 }
 
-                GuyLottie(modifier = Modifier.weight(2f).fillMaxWidth())
+                GuyLottie(modifier = Modifier.weight(1.5f).fillMaxWidth())
 
                 Text(
                     modifier = Modifier
