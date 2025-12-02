@@ -64,7 +64,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = "Καλώς ήρθες",
+                        text = "Ύλη για πανελλήνιες 2026",
                         style = LearningZoneAppTheme.typography.labelLarge,
                         color = LearningZoneAppTheme.colorScheme.onBackground
                     )
@@ -82,7 +82,7 @@ fun HomeScreen(
                     .padding(16.dp)
                     .weight(0.5f)
                     .fillMaxWidth(),
-                    text = "\"Μαθε τα βασικά! Εισαγωγή στις θεμελιώδες έννοιες του ΑΕΠΠ.\"",
+                    text = "\"Μάθε ΑΕΠΠ εύκολα, γρήγορα και διασκεδαστικά!\"",
                     style = LearningZoneAppTheme.typography.bodyItalicBold,
                     color = LearningZoneAppTheme.colorScheme.onBackground
                 )
@@ -99,7 +99,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .weight(1f),
                 ) {
-                    SubscriptionCard(onCardClick = { showSubscriptionBottomSheet = true })
+                    EbookCard(onCardClick = { showSubscriptionBottomSheet = true })
                     StatsCard(onCardClick = { showStatsBottomSheet = true })
                 }
 
@@ -107,7 +107,7 @@ fun HomeScreen(
         }
 
         if (showSubscriptionBottomSheet) {
-            SubscriptionBottomSheet(
+            EbookBottomSheet(
                 onDismiss = { showSubscriptionBottomSheet = false },
                 sheetState = sheetState
             )

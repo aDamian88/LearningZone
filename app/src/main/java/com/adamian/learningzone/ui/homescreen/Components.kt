@@ -3,7 +3,6 @@ package com.adamian.learningzone.ui.homescreen
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +40,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,7 +50,6 @@ import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
@@ -159,21 +156,13 @@ fun HomeCard(
                     color = LearningZoneAppTheme.colorScheme.onBackground,
                 )
                 Text(
-                    text = "1ο πέρασμα ύλης",
+                    text = "Η θεωρία της ύλης σε κουίζ",
                     style = LearningZoneAppTheme.typography.labelLarge,
                     color = LearningZoneAppTheme.colorScheme.onBackground
                 )
             }
 
             Spacer(modifier = Modifier.width(36.dp))
-
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.right_arrow_icon),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(25.dp)
-            )
         }
     }
 }
@@ -210,24 +199,21 @@ fun SquareCard(
             Text(
                 text = topText,
                 style = LearningZoneAppTheme.typography.labelLarge,
-                color = LearningZoneAppTheme.colorScheme.onBackground
             )
             Text(
                 text = centerText,
                 style = LearningZoneAppTheme.typography.titleLarge,
-                color = LearningZoneAppTheme.colorScheme.onBackground
             )
             Text(
                 text = bottomText,
                 style = LearningZoneAppTheme.typography.titleLarge,
-                color = LearningZoneAppTheme.colorScheme.onBackground
             )
         }
     }
 }
 
 @Composable
-fun SubscriptionCard(onCardClick: () -> Unit) {
+fun EbookCard(onCardClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(
@@ -249,7 +235,7 @@ fun SubscriptionCard(onCardClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.laptopdoodle),
+                imageVector = ImageVector.vectorResource(id = R.drawable.bookdoodle),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
@@ -257,7 +243,7 @@ fun SubscriptionCard(onCardClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Ρυθμίσεις",
+                text = "E-book",
                 style = LearningZoneAppTheme.typography.labelLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
@@ -289,7 +275,7 @@ fun StatsCard(onCardClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.bookdoodle),
+                imageVector = ImageVector.vectorResource(id = R.drawable.laptopdoodle),
                 tint = Color.Unspecified,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
@@ -307,83 +293,71 @@ fun StatsCard(onCardClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubscriptionBottomSheet(onDismiss: () -> Unit, sheetState: SheetState) {
+fun EbookBottomSheet(onDismiss: () -> Unit, sheetState: SheetState) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         containerColor = LearningZoneAppTheme.colorScheme.background,
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.bottom_sheet_background),
-                contentDescription = null
+            Text(
+                text = "E-book ΑΕΠΠ",
+                style = LearningZoneAppTheme.typography.titleLarge,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
 
-            Column(
+            Card(
+                colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
                 modifier = Modifier
+                    .padding(16.dp)
+                    .shadow(
+                        elevation = 16.dp,
+                        shape = RoundedCornerShape(20.dp),
+                        ambientColor = neonColor.copy(alpha = 0.8f),
+                        spotColor = neonColor.copy(alpha = 0.8f)
+                    )
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Ρυθμίσεις",
-                    style = LearningZoneAppTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .padding(16.dp),
+                    text = "Ένας απλός και πρακτικός οδηγός για να κατανοήσεις τις βασικές έννοιες του μαθήματος εύκολα και γρήγορα.",
+                    style = LearningZoneAppTheme.typography.labelLarge,
                     color = LearningZoneAppTheme.colorScheme.onBackground
                 )
+            }
 
-                Card(
-                    colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
+            Card(
+                colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .shadow(
+                        elevation = 16.dp,
+                        shape = RoundedCornerShape(20.dp),
+                        ambientColor = neonColor.copy(alpha = 0.8f),
+                        spotColor = neonColor.copy(alpha = 0.8f)
+                    )
+                    .fillMaxWidth()
+            ) {
+                Text(
                     modifier = Modifier
                         .padding(16.dp)
-                        .shadow(
-                            elevation = 16.dp,
-                            shape = RoundedCornerShape(20.dp),
-                            ambientColor = neonColor.copy(alpha = 0.8f),
-                            spotColor = neonColor.copy(alpha = 0.8f)
-                        )
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(16.dp),
-                        text = "Ξεκλείδωσε όλες τις δυνατότητες της εφαρμογής για ένα χρόνο! " +
-                                "Εκτός από το επίπεδο 1 θα έχεις διαθέσιμα τα επίπεδα 2 και 3 " +
-                                "με περισσότερες ερωτήσεις για καλύτερη προετοιμασία!",
-                        style = LearningZoneAppTheme.typography.labelLarge,
-                        color = LearningZoneAppTheme.colorScheme.onBackground
-                    )
-                }
-
-                Card(
-                    colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .shadow(
-                            elevation = 16.dp,
-                            shape = RoundedCornerShape(20.dp),
-                            ambientColor = neonColor.copy(alpha = 0.8f),
-                            spotColor = neonColor.copy(alpha = 0.8f)
-                        )
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(16.dp),
-                        text = "Διαθέσιμο σε επόμενη έκδοση",
-                        style = LearningZoneAppTheme.typography.labelLarge,
-                        color = LearningZoneAppTheme.colorScheme.onBackground
-                    )
-                }
+                        .align(Alignment.CenterHorizontally),
+                    text = "Δείξε μου το e-book",
+                    style = LearningZoneAppTheme.typography.labelLarge,
+                )
             }
         }
     }
@@ -400,86 +374,77 @@ fun StatsBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         containerColor = LearningZoneAppTheme.colorScheme.background,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = R.drawable.bottom_sheet_background),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
+            Text(
+                text = "Στατιστικά",
+                style = LearningZoneAppTheme.typography.titleLarge,
+                color = LearningZoneAppTheme.colorScheme.onBackground
             )
 
-            Column(
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 48.dp)
+            ) {
+                SquareCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    topText = "Ερωτήσεις",
+                    centerText = "Σύνολο",
+                    bottomText = appStats?.totalQuestions.toString(),
+                    backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
+                )
+                SquareCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(
+                            top = 48.dp,
+                            start = 8.dp,
+                            end = 8.dp,
+                            bottom = 8.dp
+                        ),
+                    topText = "Απαντήσεις",
+                    centerText = "Σύνολο",
+                    bottomText = appStats?.totalAnswers.toString(),
+                    backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
+                )
+            }
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Στατιστικά",
-                    style = LearningZoneAppTheme.typography.titleLarge,
-                    color = LearningZoneAppTheme.colorScheme.onBackground
+                SquareCard(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    topText = "Απαντήσεις",
+                    centerText = "Σωστές",
+                    bottomText = appStats?.totalCorrectAnswers.toString(),
+                    backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
                 )
-
-                Row(
+                SquareCard(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 48.dp)
-                ) {
-                    SquareCard(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(
-                                top = 48.dp,
-                                start = 8.dp,
-                                end = 8.dp,
-                                bottom = 8.dp
-                            ),
-                        topText = "Ερωτήσεις",
-                        centerText = "Σύνολο",
-                        bottomText = appStats?.totalQuestions.toString(),
-                        backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.tertiary)
-                    )
-                    SquareCard(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp),
-                        topText = "Απαντήσεις",
-                        centerText = "Σύνολο",
-                        bottomText = appStats?.totalAnswers.toString(),
-                        backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    SquareCard(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(
-                                top = 48.dp,
-                                start = 8.dp,
-                                end = 8.dp,
-                                bottom = 8.dp
-                            ),
-                        topText = "Απαντήσεις",
-                        centerText = "Σωστές",
-                        bottomText = appStats?.totalCorrectAnswers.toString(),
-                        backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary)
-                    )
-                    SquareCard(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp),
-                        topText = "Απαντήσεις",
-                        centerText = "Λάθος",
-                        bottomText = appStats?.totalWrongAnswers.toString(),
-                        backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary)
-                    )
-                }
+                        .weight(1f)
+                        .padding(
+                            top = 48.dp,
+                            start = 8.dp,
+                            end = 8.dp,
+                            bottom = 8.dp
+                        ),
+                    topText = "Απαντήσεις",
+                    centerText = "Λάθος",
+                    bottomText = appStats?.totalWrongAnswers.toString(),
+                    backgroundColor = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.primary)
+                )
             }
         }
     }
@@ -488,7 +453,7 @@ fun StatsBottomSheet(
 @Composable
 fun GuyLottie(modifier: Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.learning))
-    val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
+    val progress by animateLottieCompositionAsState(composition, iterations = 3)
 
     LottieAnimation(
         modifier = modifier,

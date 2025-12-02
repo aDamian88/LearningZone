@@ -15,38 +15,63 @@ data class AppColorScheme(
     val tertiary: Color,
     val onTertiary: Color,
     val quaternary: Color,
-    val onQuaternary: Color
-)
-
-val darkColorScheme = AppColorScheme(
-    background = gray100Dark,
-    onBackground = white,
-    surface = gray800Dark,
-    topSurface = gray600Dark,
-    primary = purple200Dark,
-    onPrimary = purple100Dark,
-    secondary = red200Dark,
-    onSecondary = red100Dark,
-    tertiary = yellow200Dark,
-    onTertiary = yellow100Dark,
-    quaternary = teal200Dark,
-    onQuaternary = teal100Dark
+    val onQuaternary: Color,
+    val error: Color,
+    val onError: Color,
+    val success: Color,
+    val onSuccess: Color,
+    val warning: Color,
+    val onWarning: Color,
+    val info: Color,
+    val onInfo: Color
 )
 
 val lightColorScheme = AppColorScheme(
-    background = gray100,
-    onBackground = black,
-    surface = gray100,
-    topSurface = gray300,
-    primary = purple200,
-    onPrimary = purple100,
-    secondary = red200,
-    onSecondary = red100,
-    tertiary = yellow200,
-    onTertiary = yellow100,
-    quaternary = teal200,
-    onQuaternary = teal100
+    background = backgroundLight,
+    onBackground = onBackgroundLight,
+    surface = surfaceLight,
+    topSurface = topSurfaceLight,
+    primary = primaryLight,
+    onPrimary = onPrimaryLight,
+    secondary = secondaryLight,
+    onSecondary = onSecondaryLight,
+    tertiary = tertiaryLight,
+    onTertiary = onTertiaryLight,
+    quaternary = quaternaryLight,
+    onQuaternary = onQuaternaryLight,
+    error = errorLight,
+    onError = onErrorLight,
+    success = successLight,
+    onSuccess = onSuccessLight,
+    warning = warningLight,
+    onWarning = onWarningLight,
+    info = infoLight,
+    onInfo = onInfoLight
 )
+
+val darkColorScheme = AppColorScheme(
+    background = backgroundDark,
+    onBackground = onBackgroundDark,
+    surface = surfaceDark,
+    topSurface = topSurfaceDark,
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    tertiary = tertiaryDark,
+    onTertiary = onTertiaryDark,
+    quaternary = quaternaryDark,
+    onQuaternary = onQuaternaryDark,
+    error = errorDark,
+    onError = onErrorDark,
+    success = successDark,
+    onSuccess = onSuccessDark,
+    warning = warningDark,
+    onWarning = onWarningDark,
+    info = infoDark,
+    onInfo = onInfoDark
+)
+
 
 val localAppColorScheme = staticCompositionLocalOf {
     lightColorScheme

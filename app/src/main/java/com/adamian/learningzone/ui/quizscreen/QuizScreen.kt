@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -93,11 +94,11 @@ fun QuizScreen(
     BackHandler {}
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         topBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
                     .background(LearningZoneAppTheme.colorScheme.background),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -105,11 +106,11 @@ fun QuizScreen(
                     Icon(
                         imageVector = Icons.Default.Close,
                         tint = LearningZoneAppTheme.colorScheme.onBackground,
-                        contentDescription = "Close"
+                        contentDescription = null,
+                        modifier = Modifier.size(34.dp)
                     )
                 }
-
-                Box(
+                Column(
                     modifier = Modifier
                         .weight(1f)
                         .height(16.dp)
@@ -146,6 +147,13 @@ fun QuizScreen(
                     contentPadding = PaddingValues(vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    item {
+                        Text(
+                            modifier = Modifier,
+                            text = "Eρώτηση ${currentQuestionIndex + 1}/10",
+                            color = LearningZoneAppTheme.colorScheme.onBackground
+                        )
+                    }
                     item {
                         Text(
                             text = question.title,
@@ -233,7 +241,7 @@ fun AnswerBottomSheet(
         onDismissRequest = {},
         sheetState = sheetState,
         scrimColor = Color.Transparent,
-        containerColor = if (isCorrect) Color(0xFFDFF0D8) else Color(0xFFF2DEDE), // todo put these or similar colors to palette + for dark mode
+        containerColor = if (isCorrect) LearningZoneAppTheme.colorScheme.success else LearningZoneAppTheme.colorScheme.error,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = null
     ) {
@@ -253,6 +261,7 @@ fun AnswerBottomSheet(
                 },
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -260,20 +269,6 @@ fun AnswerBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(
-                        id = if (isCorrect) R.drawable.coffeedoodle else R.drawable.pendoodle
-                    ),
-                    tint = Color.Unspecified,
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
-
-                Text(
-                    text = if (isCorrect) "Σωστά" else "Θέλει διόρθωση",
-                    style = LearningZoneAppTheme.typography.titleNormal,
-                    modifier = Modifier.weight(1f)
-                )
 
                 if (isCorrect) {
                     RightLottie(
@@ -284,6 +279,12 @@ fun AnswerBottomSheet(
                         modifier = Modifier.size(48.dp)
                     )
                 }
+
+                Text(
+                    text = if (isCorrect) "Σωστά" else "Θέλει διόρθωση",
+                    style = LearningZoneAppTheme.typography.titleNormal,
+                    modifier = Modifier.weight(1f)
+                )
             }
 
             if (!isCorrect) {
@@ -513,7 +514,7 @@ fun QuestionBox(question: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 24.dp)
+            .padding(horizontal = 16.dp)
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(10.dp),
@@ -578,7 +579,7 @@ fun AnswerCard(
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected)
-                LearningZoneAppTheme.colorScheme.topSurface
+                LearningZoneAppTheme.colorScheme.tertiary
             else
                 LearningZoneAppTheme.colorScheme.surface
         ),
@@ -605,7 +606,10 @@ fun AnswerCard(
                 text = answer,
                 style = LearningZoneAppTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
-                color = LearningZoneAppTheme.colorScheme.onBackground
+                color = if (isSelected)
+                    LearningZoneAppTheme.colorScheme.onTertiary
+                else
+                    LearningZoneAppTheme.colorScheme.topSurface
             )
         }
     }
@@ -641,7 +645,10 @@ fun SubmitAnswerButton(
                 text = "Υποβολή",
                 style = LearningZoneAppTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
-                color = LearningZoneAppTheme.colorScheme.onBackground
+                color = if (enabled)
+                    LearningZoneAppTheme.colorScheme.onQuaternary
+                else
+                    LearningZoneAppTheme.colorScheme.topSurface
             )
         }
     }

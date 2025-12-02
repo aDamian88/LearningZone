@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,13 +48,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.domain.usecase.GetChapterStatusFirstPassUC
-import com.adamian.learningzone.ui.homescreen.CircularProgressBar
 import com.adamian.learningzone.ui.navigation.NavRoute
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme
 import com.adamian.learningzone.ui.theme.LearningZoneAppTheme.neonColor
@@ -70,19 +69,24 @@ fun ChapterScreen(
     }
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         topBar = {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(LearningZoneAppTheme.colorScheme.background),
-                verticalAlignment = Alignment.CenterVertically
+                    .background(LearningZoneAppTheme.colorScheme.background)
+                    .padding(horizontal = 4.dp),
+                contentAlignment = Alignment.Center
             ) {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(
+                    onClick = { navController.popBackStack() },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Sharp.ArrowBack,
                         tint = LearningZoneAppTheme.colorScheme.onBackground,
-                        contentDescription = "Back"
+                        contentDescription = null,
+                        modifier = Modifier.size(34.dp)
                     )
                 }
                 Text(
@@ -104,45 +108,47 @@ fun ChapterScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(0.3f)
+                        .weight(0.1f)
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
 
+                    val totalProgress = appProgress?.completionPercentage?.toFloat() ?: 0f
                     Row(
-                        modifier = Modifier
-                            .weight(0.3f)
-                            .padding(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(8.dp)
                     ) {
-                        appProgress?.completionPercentage?.toFloat()?.let {
-                            CircularProgressBar(
-                                percentage = it,
-                                number = 100
-                            )
-                        }
-
                         Text(
-                            modifier = Modifier
-                                .padding(top = 8.dp, start = 24.dp),
-                            text = "1ο πέρασμα ύλης",
-                            style = LearningZoneAppTheme.typography.titleNormal,
+                            modifier = Modifier.padding(end = 8.dp),
+                            text = "Συνολικό ποσοστό ολοκλήρωσης:",
+                            style = LearningZoneAppTheme.typography.labelLarge,
+                            color = LearningZoneAppTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            modifier = Modifier,
+                            text = "${(totalProgress * 100).toInt()}%",
+                            style = LearningZoneAppTheme.typography.labelLarge,
                             color = LearningZoneAppTheme.colorScheme.onBackground
                         )
                     }
-                    Text(
-                        modifier = Modifier
-                            .weight(0.3f)
-                            .padding(8.dp),
-                        text = "Εδώ βρίσκονται όλα τα κεφάλαια για το πρώτο σου πέρασμα. Μάθε τα θεμέλια του ΑΕΠΠ με απλά βήματα.",
-                        style = LearningZoneAppTheme.typography.bodyBold,
-                        color = LearningZoneAppTheme.colorScheme.onBackground
-                    )
+
+                    appProgress?.completionPercentage?.toFloat()?.let {
+                        LinearProgressIndicator(
+                            progress = { it },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .height(24.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            color = LearningZoneAppTheme.colorScheme.primary,
+                            trackColor = Color.Transparent
+                        )
+                    }
                 }
 
                 ChapterListContent(
                     viewModel = viewModel,
                     navController = navController,
-                    modifier = Modifier.weight(0.7f)
+                    modifier = Modifier.weight(0.9f)
                 )
             }
         }
@@ -172,41 +178,31 @@ fun ChapterListContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val chapters = listOf(
-                ChapterData(1, R.drawable.problem_analysis, "Κεφάλαιο 1", "Ανάλυση Προβλήματος"),
+                ChapterData(1, "1. Ανάλυση Προβλήματος"),
                 ChapterData(
                     2,
-                    R.drawable.basic_algorithm_concept,
-                    "Κεφάλαιο 2",
-                    "Βασικές Έννοιες Αλγορίθμων"
+                    "2. Βασικές Έννοιες Αλγορίθμων"
                 ),
                 ChapterData(
                     3,
-                    R.drawable.data_stractures_algorithms,
-                    "Κεφάλαιο 3",
-                    "Δομές Δεδομένων και Αλγόριθμοι"
+                    "3. Δομές Δεδομένων και Αλγόριθμοι"
                 ),
                 ChapterData(
                     4,
-                    R.drawable.algorithm_design_techniques,
-                    "Κεφάλαιο 4",
-                    "Τεχνικές Σχεδίασης Αλγόριθμων"
+                    "4. Τεχνικές Σχεδίασης Αλγόριθμων"
                 ),
                 ChapterData(
                     6,
-                    R.drawable.introduction_programming,
-                    "Κεφάλαιο 6",
-                    "Εισαγωγή στον Προγραμματισμό"
+                    "6. Εισαγωγή στον Προγραμματισμό"
                 ),
                 ChapterData(
                     7,
-                    R.drawable.basic_programming_concepts,
-                    "Κεφάλαιο 7",
-                    "Βασικές Έννοιες Προγραμματισμού"
+                    "7. Βασικές Έννοιες Προγραμματισμού"
                 ),
-                ChapterData(8, R.drawable.select_n_repeat, "Κεφάλαιο 8", "Επιλογή και Επανάληψη"),
-                ChapterData(9, R.drawable.matrix, "Κεφάλαιο 9", "Πίνακες"),
-                ChapterData(10, R.drawable.subprograms, "Κεφάλαιο 10", "Υποπρογράμματα"),
-                ChapterData(13, R.drawable.debbuging, "Κεφάλαιο 13", "Εκσφαλμάτωση Προγράμματος")
+                ChapterData(8, "8. Επιλογή και Επανάληψη"),
+                ChapterData(9, "9. Πίνακες"),
+                ChapterData(10, "10. Υποπρογράμματα"),
+                ChapterData(13, "13. Εκσφαλμάτωση Προγράμματος")
             )
             items(
                 items = chapters,
@@ -247,9 +243,7 @@ fun ChapterCardWithProgress(
 
     ChapterCard(
         id = chapter.id,
-        iconResId = chapter.iconResId,
         title = chapter.title,
-        subtitle = chapter.subtitle,
         chapterProgress = chapterProgress,
         onClick = onClick
     )
@@ -257,9 +251,7 @@ fun ChapterCardWithProgress(
 
 data class ChapterData(
     val id: Int,
-    val iconResId: Int,
     val title: String,
-    val subtitle: String
 )
 
 fun checkTheChapter(
@@ -315,9 +307,7 @@ fun InfoDialog(onDismiss: () -> Unit) {
 @Composable
 fun ChapterCard(
     id: Int,
-    iconResId: Int,
     title: String,
-    subtitle: String,
     chapterProgress: List<GetChapterStatusFirstPassUC.ChapterStats>,
     onClick: (Int) -> Unit
 ) {
@@ -339,51 +329,12 @@ fun ChapterCard(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Row {
-                        Card(
-                            colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.secondary),
-                            modifier = Modifier.size(32.dp),
-                            shape = RoundedCornerShape(8.dp),
-                        ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = iconResId),
-                                    tint = Color.Unspecified,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        Text(
-                            text = title,
-                            style = LearningZoneAppTheme.typography.titleLarge,
-                            color = LearningZoneAppTheme.colorScheme.onBackground
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = subtitle,
-                        style = LearningZoneAppTheme.typography.bodyBold,
-                        color = LearningZoneAppTheme.colorScheme.onBackground,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Spacer(modifier = Modifier.width(18.dp))
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.chapter_arrow_icon),
-                    tint = Color.Unspecified,
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp)
+                Text(
+                    text = title,
+                    style = LearningZoneAppTheme.typography.labelLarge,
+                    color = LearningZoneAppTheme.colorScheme.onBackground
                 )
+                Spacer(modifier = Modifier.height(12.dp))
             }
 
             val progress = chapterProgress.find { it.chapterId == id }?.totalProgress ?: 0.0f
@@ -396,8 +347,6 @@ fun ChapterCard(
                 answeredQuestions = answeredQuestions
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             ChapterProgressRow(progress)
         }
     }
@@ -408,7 +357,7 @@ fun ChapterProgressRow(progress: Float) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -490,7 +439,6 @@ fun StatChip(label: String, value: String, backgroundColor: Color) {
         Text(
             text = "$label: $value",
             style = LearningZoneAppTheme.typography.labelNormal,
-            color = LearningZoneAppTheme.colorScheme.onBackground,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
         )
     }
