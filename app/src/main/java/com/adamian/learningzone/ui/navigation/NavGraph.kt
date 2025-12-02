@@ -98,8 +98,8 @@ fun addSummaryScreen(
             correctCount = correct,
             wrongCount = wrong,
             onNavigateHome = {
-                navController.navigate(NavRoute.Home.path) {
-                    popUpTo(NavRoute.Home.path) { inclusive = true }
+                navController.navigate(NavRoute.Chapters.path) {
+                    popUpTo(NavRoute.Chapters.path) { inclusive = true }
                 }
             }
         )

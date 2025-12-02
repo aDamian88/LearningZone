@@ -7,22 +7,22 @@ val white = Color(0xFFFFFFFF)
 val black = Color(0xFF000000)
 
 // Light Theme Colors
-val backgroundLight = Color(0xFFF8F5F0) // Warm ivory
+val backgroundLight = Color(0xFFF8F5F0)
 val onBackgroundLight = Color(0xFF2E2E2E)
 
 val surfaceLight = Color(0xFFFCFAF7)
-val topSurfaceLight = Color(0xFFE9E3DA)
+val topSurfaceLight = Color(0xFF2E2E2E)
 
-val primaryLight = Color(0xFF7E57C2) // Soft lavender purple
+val primaryLight = Color(0xFF7E57C2)
 val onPrimaryLight = white
 
-val secondaryLight = Color(0xFF4FA3A6) // Calm teal (friendly, not error-like)
+val secondaryLight = Color(0xFF4FA3A6)
 val onSecondaryLight = white
 
-val tertiaryLight = Color(0xFFF7A531) // Warm amber highlight
+val tertiaryLight = Color(0xFFF7A531)
 val onTertiaryLight = Color(0xFF3E2A00)
 
-val quaternaryLight = Color(0xFF6FB9E8) // Soft sky-blue
+val quaternaryLight = Color(0xFF6FB9E8)
 val onQuaternaryLight = Color(0xFF00344C)
 
 
@@ -33,7 +33,7 @@ val onBackgroundDark = Color(0xFFF2F2F2)
 val surfaceDark = Color(0xFF1A1A1A)
 val topSurfaceDark = Color(0xFFF2F2F2)
 
-val primaryDark = Color(0xFFBFA6FF) // Same family, lighter for dark
+val primaryDark = Color(0xFFBFA6FF)
 val onPrimaryDark = Color(0xFF2F0050)
 
 val secondaryDark = Color(0xFF7BD1D4)

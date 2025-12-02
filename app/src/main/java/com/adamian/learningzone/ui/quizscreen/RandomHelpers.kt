@@ -9,6 +9,7 @@ private val doodleIcons = listOf(
     R.drawable.bagdoodle,
     R.drawable.headphonesdoodle,
     R.drawable.girlbagdoodle,
+    R.drawable.coffeedoodle
 )
 
 private val lotties = listOf(

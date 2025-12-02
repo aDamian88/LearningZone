@@ -150,7 +150,8 @@ fun QuizScreen(
                     item {
                         Text(
                             modifier = Modifier,
-                            text = "Eρώτηση ${currentQuestionIndex + 1}/10",
+                            text = "Eρώτηση ${currentQuestionIndex + 1}/${questions.size}",
+                            style = LearningZoneAppTheme.typography.labelNormal,
                             color = LearningZoneAppTheme.colorScheme.onBackground
                         )
                     }

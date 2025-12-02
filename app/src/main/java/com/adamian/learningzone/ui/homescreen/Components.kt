@@ -487,6 +487,18 @@ fun WrongLottie(modifier: Modifier) {
 }
 
 @Composable
+fun CrownLottie(modifier: Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.crown))
+    val progress by animateLottieCompositionAsState(composition)
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        progress = { progress }
+    )
+}
+
+@Composable
 fun WarningLottie(modifier: Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.warning))
     val progress by animateLottieCompositionAsState(composition)
