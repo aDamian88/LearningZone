@@ -1,5 +1,6 @@
 package com.adamian.learningzone.ui.quizscreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -31,6 +32,7 @@ fun SummaryScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(LearningZoneAppTheme.colorScheme.background)
             .padding(24.dp)
     ) {
 
@@ -106,8 +108,8 @@ fun DecorativeIconsBackground() {
 
         val slots = listOf(
             Pair(0, 0), Pair(3, 0),
-            Pair(0, 1),              Pair(3, 1),
-            Pair(0, 2),              Pair(3, 2),
+            Pair(0, 1), Pair(3, 1),
+            Pair(0, 2), Pair(3, 2),
             Pair(0, 3), Pair(1, 3), Pair(2, 3), Pair(3, 3)
         )
 

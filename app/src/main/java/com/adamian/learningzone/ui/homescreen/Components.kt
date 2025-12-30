@@ -294,6 +294,7 @@ fun StatsCard(onCardClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EbookBottomSheet(onDismiss: () -> Unit, sheetState: SheetState) {
+    val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -307,34 +308,19 @@ fun EbookBottomSheet(onDismiss: () -> Unit, sheetState: SheetState) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "E-book ΑΕΠΠ",
+                text = "E-book ΑΕΠΠ (Σύνοψη ύλης)",
                 style = LearningZoneAppTheme.typography.titleLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
 
-            Card(
-                colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
+            Text(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .shadow(
-                        elevation = 16.dp,
-                        shape = RoundedCornerShape(20.dp),
-                        ambientColor = neonColor.copy(alpha = 0.8f),
-                        spotColor = neonColor.copy(alpha = 0.8f)
-                    )
                     .fillMaxWidth()
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    text = "Ένας απλός και πρακτικός οδηγός για να κατανοήσεις τις βασικές έννοιες του μαθήματος εύκολα και γρήγορα.",
-                    style = LearningZoneAppTheme.typography.labelLarge,
-                    color = LearningZoneAppTheme.colorScheme.onBackground
-                )
-            }
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                text = "Ένας πρακτικός οδηγός σε μορφή PDF για κατανόηση και γρήγορη επανάληψη των βασικών εννοιών του μαθήματος.",
+                style = LearningZoneAppTheme.typography.labelLarge,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
 
             Card(
                 colors = CardDefaults.cardColors(LearningZoneAppTheme.colorScheme.quaternary),
@@ -349,13 +335,14 @@ fun EbookBottomSheet(onDismiss: () -> Unit, sheetState: SheetState) {
                         ambientColor = neonColor.copy(alpha = 0.8f),
                         spotColor = neonColor.copy(alpha = 0.8f)
                     )
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                    onClick = { uriHandler.openUri("https://drive.google.com/file/d/1lN0wEhdgtV787gM3OKbRSRrPRpDSDF7g/preview") }
             ) {
                 Text(
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.CenterHorizontally),
-                    text = "Δείξε μου το e-book",
+                    text = "Προβολή e-book",
                     style = LearningZoneAppTheme.typography.labelLarge,
                 )
             }
@@ -491,10 +478,19 @@ fun CrownLottie(modifier: Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.crown))
     val progress by animateLottieCompositionAsState(composition)
 
+    val dynamicProperties = rememberLottieDynamicProperties(
+        rememberLottieDynamicProperty(
+            property = LottieProperty.STROKE_COLOR,
+            value = LearningZoneAppTheme.colorScheme.onBackground.toArgb(),
+            keyPath = arrayOf("**")
+        )
+    )
+
     LottieAnimation(
         modifier = modifier,
         composition = composition,
-        progress = { progress }
+        progress = { progress },
+        dynamicProperties = dynamicProperties
     )
 }
 
