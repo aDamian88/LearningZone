@@ -35,11 +35,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.adamian.learningzone.R
 import com.adamian.learningzone.domain.usecase.GetChapterStatusFirstPassUC
@@ -62,7 +63,7 @@ fun ChapterScreen(
     navController: NavController,
     viewModel: ChapterScreenVM = hiltViewModel()
 ) {
-    val appProgress by viewModel.appStats.collectAsState()
+    val appProgress by viewModel.appStats.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadChapterLearningProgress()
@@ -108,14 +109,16 @@ fun ChapterScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(0.1f)
+                        .weight(0.15f)
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
 
                     val totalProgress = appProgress?.completionPercentage?.toFloat() ?: 0f
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
                     ) {
                         Text(
                             modifier = Modifier.padding(end = 8.dp),
@@ -162,9 +165,9 @@ fun ChapterListContent(
     modifier: Modifier
 ) {
 
-    val chapterProgress by viewModel.chapterLearningProgress.collectAsState()
-    var selectedChapterId by remember { mutableIntStateOf(0) }
+    val chapterProgress by viewModel.chapterLearningProgress.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
+    var selectedChapterId by rememberSaveable { mutableIntStateOf(-1) }
 
     Box(
         modifier = modifier,
@@ -220,7 +223,12 @@ fun ChapterListContent(
                             selectedChapterId = chapterId
                             showDialog = true
                         } else {
-                            navController.navigate(NavRoute.quizRoute(chapterId))
+                            navController.navigate(
+                                NavRoute.quizRoute(
+                                    chapterId = chapterId,
+                                    isRecap = 0
+                                )
+                            )
                         }
                     }
                 )
@@ -228,7 +236,17 @@ fun ChapterListContent(
         }
 
         if (showDialog) {
-            InfoDialog(onDismiss = { showDialog = false })
+            InfoDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = {
+                    navController.navigate(
+                        NavRoute.quizRoute(
+                            chapterId = selectedChapterId,
+                            isRecap = 1
+                        )
+                    )
+                }
+            )
         }
 
     }
@@ -266,7 +284,7 @@ fun checkTheChapter(
 }
 
 @Composable
-fun InfoDialog(onDismiss: () -> Unit) {
+fun InfoDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = LearningZoneAppTheme.colorScheme.surface,
@@ -282,23 +300,27 @@ fun InfoDialog(onDismiss: () -> Unit) {
         },
         title = {
             Text(
-                text = "Ολοκληρωμένο κεφάλαιο!",
+                text = "Ολοκληρωμένο κεφάλαιο!\nΠάμε επανάληψη κεφαλαίου;",
                 style = LearningZoneAppTheme.typography.labelLarge,
                 color = LearningZoneAppTheme.colorScheme.onBackground
             )
         },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = "Κλείσιμο",
+                    style = LearningZoneAppTheme.typography.labelLarge,
+                    color = LearningZoneAppTheme.colorScheme.primary
+                )
+            }
+        },
         confirmButton = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TextButton(onClick = onDismiss) {
-                    Text(
-                        text = "Kλείσιμο",
-                        style = LearningZoneAppTheme.typography.labelLarge,
-                        color = LearningZoneAppTheme.colorScheme.primary
-                    )
-                }
+            TextButton(onClick = onConfirm) {
+                Text(
+                    text = "Επανάληψη",
+                    style = LearningZoneAppTheme.typography.labelLarge,
+                    color = LearningZoneAppTheme.colorScheme.primary
+                )
             }
         }
     )
@@ -325,22 +347,17 @@ fun ChapterCard(
             .fillMaxWidth(),
     ) {
         Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = title,
-                    style = LearningZoneAppTheme.typography.labelLarge,
-                    color = LearningZoneAppTheme.colorScheme.onBackground
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = title,
+                style = LearningZoneAppTheme.typography.labelLarge,
+                color = LearningZoneAppTheme.colorScheme.onBackground
+            )
 
-            val progress = chapterProgress.find { it.chapterId == id }?.totalProgress ?: 0.0f
-            val totalQuestions = chapterProgress.find { it.chapterId == id }?.totalQuestions ?: 0
-            val answeredQuestions =
-                chapterProgress.find { it.chapterId == id }?.answeredQuestions ?: 0
+            val stats = chapterProgress.firstOrNull { it.chapterId == id }
+            val progress = stats?.totalProgress ?: 0f
+            val totalQuestions = stats?.totalQuestions ?: 0
+            val answeredQuestions = stats?.answeredQuestions ?: 0
 
             StatsChipsRow(
                 totalQuestions = totalQuestions,
@@ -411,7 +428,7 @@ fun StatsChipsRow(
     val chipData = listOf(
         Triple("Ερωτήσεις", totalQuestions.toString(), LearningZoneAppTheme.colorScheme.secondary),
         Triple(
-            "Απαντησεις",
+            "Απαντήσεις",
             answeredQuestions.toString(),
             LearningZoneAppTheme.colorScheme.quaternary
         ),

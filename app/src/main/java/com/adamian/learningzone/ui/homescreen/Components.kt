@@ -106,7 +106,7 @@ fun CircularProgressBar(
             )
         }
         Text(
-            text = (curPercentage.value * number).toInt().toString(),
+            text = "${(curPercentage.value * number).toInt()}%",
             color = LearningZoneAppTheme.colorScheme.onBackground,
             modifier = Modifier.align(Alignment.Center),
             style = LearningZoneAppTheme.typography.bodyBold

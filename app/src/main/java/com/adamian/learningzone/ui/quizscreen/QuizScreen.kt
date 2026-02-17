@@ -70,12 +70,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun QuizScreen(
     chapterId: Int,
+    isRecap: Int,
     navController: NavController,
     viewModel: QuizScreenViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(chapterId) {
-        viewModel.setChapterId(chapterId)
+        viewModel.setChapterId(chapterId = chapterId, isRecap = isRecap)
     }
 
     val questions by viewModel.questions.collectAsState()
@@ -282,7 +283,7 @@ fun AnswerBottomSheet(
                 }
 
                 Text(
-                    text = if (isCorrect) "Σωστά" else "Θέλει διόρθωση",
+                    text = if (isCorrect) "Μπράβο" else "Θέλει διόρθωση",
                     style = LearningZoneAppTheme.typography.titleNormal,
                     modifier = Modifier.weight(1f)
                 )
@@ -290,7 +291,7 @@ fun AnswerBottomSheet(
 
             if (!isCorrect) {
                 Text(
-                    text = "Η σωστή απάντηση είναι: ${question.correctOption}",
+                    text = "Έπρεπε να επιλέξεις: ${question.correctOption}",
                     style = LearningZoneAppTheme.typography.bodyBold,
                 )
             }

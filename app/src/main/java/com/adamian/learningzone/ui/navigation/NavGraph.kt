@@ -1,6 +1,8 @@
 package com.adamian.learningzone.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,6 +14,7 @@ import com.adamian.learningzone.ui.chapterscreen.ChapterScreen
 import com.adamian.learningzone.ui.homescreen.HomeScreen
 import com.adamian.learningzone.ui.loginscreen.LoginView
 import com.adamian.learningzone.ui.quizscreen.QuizScreen
+import com.adamian.learningzone.ui.quizscreen.QuizScreenViewModel
 import com.adamian.learningzone.ui.quizscreen.SummaryScreen
 
 
@@ -70,12 +73,18 @@ private fun addQuizScreen(
 ) {
     navGraphBuilder.composable(
         route = NavRoute.Quiz.path,
-        arguments = listOf(navArgument("chapterId") { type = NavType.IntType }) // Define argument type
+        arguments = listOf(
+            navArgument("chapterId") { type = NavType.IntType },
+            navArgument("isRecap") { type = NavType.IntType }
+        )
     ) { backStackEntry ->
-        val chapterId = backStackEntry.arguments?.getInt("chapterId") ?: 0 // Retrieve the chapterId argument
+        val chapterId = backStackEntry.arguments?.getInt("chapterId") ?: 0
+        val isRecap = backStackEntry.arguments?.getInt("isRecap") ?: 0
+
         QuizScreen(
             chapterId = chapterId,
-            navController = navController
+            navController = navController,
+            isRecap = isRecap
         )
     }
 }
@@ -84,23 +93,19 @@ fun addSummaryScreen(
     navController: NavController,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(
-        route = NavRoute.Summary.path,
-        arguments = listOf(
-            navArgument("correct") { type = NavType.IntType },
-            navArgument("wrong") { type = NavType.IntType }
-        )
-    ) { backStackEntry ->
-        val correct = backStackEntry.arguments?.getInt("correct") ?: 0
-        val wrong = backStackEntry.arguments?.getInt("wrong") ?: 0
+    navGraphBuilder.composable(route = NavRoute.Summary.path) { summaryEntry ->
+        val quizEntry = remember(summaryEntry) {
+            navController.getBackStackEntry(NavRoute.Quiz.path)
+        }
+        val quizViewModel: QuizScreenViewModel = hiltViewModel(quizEntry)
 
         SummaryScreen(
-            correctCount = correct,
-            wrongCount = wrong,
-            onNavigateHome = {
-                navController.navigate(NavRoute.Chapters.path) {
-                    popUpTo(NavRoute.Chapters.path) { inclusive = true }
-                }
+            quizViewModel = quizViewModel,
+            onNavigateToChapters = {
+                navController.popBackStack(
+                    route = NavRoute.Chapters.path,
+                    inclusive = false
+                )
             }
         )
     }
